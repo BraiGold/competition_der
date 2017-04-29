@@ -1,4 +1,32 @@
+\par País (\underline{idPaís}, nombre)
 
+\par Maestro (\underline{númPlacaInstructor}, nombre, apellido, graduación, \dotuline{idPaís})
+\par Escuela (\underline{idEscuela}, nombre, \dotuline{idMaestro})
 
+\par Estudiante (\underline{númCertificado}, nombre, apellido, género, graduación, peso, foto, \dotuline{idEscuela})
+\par Participante (\underline{\dotuline{númCertificado}}, documentoDeIdentidad, fechaDeNacimiento)
+\par Coach (\underline{\dotuline{númCertificado}})
 
+\par esIntegranteDe (\underline{\dotuline{númCertificado}}, \underline{\dotuline{idInscripción}}, esTitular)
+\par Inscripción (\underline{idInscripción}, nombre, \dotuline{idCoach}, grupalOIndividual)
+\par InscripciónIndividual (\underline{\dotuline{idInscripción}})
+\par InscripciónGrupal (\underline{\dotuline{idInscripción}}, nombre)
 
+\par esEn (\underline{\dotuline{idInscripción}}, \underline{\dotuline{idCompetencia}})
+
+\par Competencia (\underline{idCompetencia}, \dotuline{idCategoría}, cantidadDeÁrbitros, tipo)
+\par CompetenciaFormas (\underline{\dotuline{idCompetencia}})
+\par CompetenciaCombate (\underline{\dotuline{idCompetencia}})
+\par CompetenciaSalto (\underline{\dotuline{idCompetencia}})
+\par CompetenciaRotura (\underline{\dotuline{idCompetencia}})
+\par CompetenciaCombatePorEquipos (\underline{\dotuline{idCompetencia}})
+
+\par Categoría (\underline{idCategoría}, género)
+\par CategoríaDan (\underline{\dotuline{idCategoría}}, dan)
+\par CategoríaEdad (\underline{\dotuline{idCategoría}}, mín, máx)
+\par CategoríaPeso (\underline{\dotuline{idCategoría}}, mín, máx)
+
+\par Ring (\underline{númeroDeRing})
+\par Árbitro (\underline{númPlacaÁrbitro}, nombre, apellido, graduación, \dotuline{idPaís})
+
+\par esArbitradaPor (\underline{\dotuline{idCategoría}}, \underline{\dotuline{númPlacaÁrbitro}}, \dotuline{númeroDeRing}, función)
