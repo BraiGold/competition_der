@@ -1,0 +1,240 @@
+graph MER {
+  // Entidades y relaciones.
+  Estudiante [shape=box];
+  estudiaEn [shape=diamond];
+  Escuela [shape=box];
+  esDirigidaPor [shape=diamond];
+  Maestro [shape=box];
+  oEstudiante [shape=circle,label=o];
+  Participante [shape=box];
+  Coach [shape=box];
+
+  Inscripcion [shape=box];
+  esIntegranteDe [shape=diamond];
+  coacheaA [shape=diamond];
+  dInscripcion [shape=circle,label=d];
+  Individual [shape=box];
+  Grupal [shape=box];
+  esEn [shape=diamond];
+  Competencia [shape=box];
+
+  perteneceA [shape=diamond];
+  Categoria [shape=box];
+  oCategoria [shape=circle,label=o];
+  Dan [shape=box];
+  Edad [shape=box];
+  Peso [shape=box];
+
+  Pais [shape=box];
+  seEncuentraEn [shape=diamond];
+  esOriginarioDe [shape=diamond];
+
+  dCompetencia [shape=circle,label=d];
+  Formas [shape=box];
+  Combate [shape=box];
+  Salto [shape=box];
+  Rotura [shape=box];
+  CombatePorEquipos [shape=box];
+
+  Ring [shape=box];
+  Arbitro [shape=box];
+  esArbitradaPor [shape=diamond];
+
+  // Conectores
+  Estudiante -- estudiaEn [label=N];
+  estudiaEn -- Escuela [label=1];
+  Escuela -- esDirigidaPor [label=1];
+  esDirigidaPor -- Maestro [label=1];
+  Escuela -- seEncuentraEn [label=N];
+  seEncuentraEn -- Pais [label=1];
+
+  Estudiante -- oEstudiante;
+  oEstudiante -- Participante;
+  oEstudiante -- Coach;
+  Participante -- esIntegranteDe [label=N];
+  esIntegranteDe -- Inscripcion [label=M];
+  Coach -- coacheaA [label=1];
+  coacheaA -- Inscripcion [label=N];
+  Inscripcion -- dInscripcion;
+  dInscripcion -- Individual;
+  dInscripcion -- Grupal;
+
+  Inscripcion -- esEn [label=N];
+  esEn -- Competencia [label=M];
+  Competencia -- dCompetencia;
+  dCompetencia -- Formas;
+  dCompetencia -- Combate;
+  dCompetencia -- Salto;
+  dCompetencia -- Rotura;
+  dCompetencia -- CombatePorEquipos;
+
+  Competencia -- perteneceA [label=N];
+  perteneceA -- Categoria [label=1];
+  Categoria -- oCategoria;
+  oCategoria -- Dan;
+  oCategoria -- Edad;
+  oCategoria -- Peso;
+
+  Competencia -- esArbitradaPor [label=M];
+  Ring -- esArbitradaPor [label=1];
+  Arbitro -- esArbitradaPor [label=N];
+  Arbitro -- esOriginarioDe [label=N];
+  esOriginarioDe -- Pais [label=1];
+
+  // Atributos y conectores de conectores
+  //   1. Poner de nombre clusterNombre.
+  //   2. Agregar:
+  //          margin=0; style=invis;
+  //          node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+  //   TODO: ver como hacer para acortar los edges.
+  subgraph clusterAtributosMaestro {
+    margin=0; style=invis;
+    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+    aMaestroNombreCompleto [shape=ellipse, label=nombreCompleto];
+    aMaestroGraduacion [shape=ellipse, label=graduacion];
+    aMaestroNumeroPlacaDeInstructor [shape=ellipse, label=<<u>placaDeInstructor</u>>];
+    Maestro -- aMaestroNombreCompleto;
+    Maestro -- aMaestroGraduacion;
+    Maestro -- aMaestroNumeroPlacaDeInstructor;
+  }
+
+  subgraph clusterAtributosEstudiante {
+    margin=0; style=invis;
+    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+    aEstudianteId [shape=ellipse, label=<<u>idEstudiante</u>>];
+    aEstudianteNombreCompleto [shape=ellipse, label=nombreCompleto];
+    aEstudianteGraduacion [shape=ellipse, label=graduacion];
+    aEstudianteCertificadoITF [shape=ellipse, label=numeroCertificadoITF];
+    aEstudianteFoto [shape=ellipse, label="foto?"];
+    Estudiante -- aEstudianteId;
+    Estudiante -- aEstudianteNombreCompleto;
+    Estudiante -- aEstudianteGraduacion;
+    Estudiante -- aEstudianteCertificadoITF;
+    Estudiante -- aEstudianteFoto;
+  }
+
+  subgraph clusterAtributosParticipante {
+    margin=0; style=invis;
+    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+    aParticipanteDNI [shape=ellipse, label=DNI];
+    aParticipanteFechaDeNac [shape=ellipse, label=fechaDeNacimiento];
+    aParticipanteGenero [shape=ellipse, label=genero];
+    aParticipantePeso [shape=ellipse, label=peso];
+    Participante -- aParticipanteDNI;
+    Participante -- aParticipanteFechaDeNac;
+    Participante -- aParticipanteGenero;
+    Participante -- aParticipantePeso;
+  }
+
+  subgraph clusterAtributosArbitro {
+    margin=0; style=invis;
+    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+    aArbitroNombre [shape=ellipse, label=DNI];
+    aArbitroGraduacion [shape=ellipse, label=fechaDeNacimiento];
+    aArbitroNroPlaca [shape=ellipse, label=<<u>numeroDePlaca</u>>];
+    Arbitro -- aArbitroNombre;
+    Arbitro -- aArbitroGraduacion;
+    Arbitro -- aArbitroNroPlaca;
+  }
+
+  subgraph clusterAtributosGrupal {
+    margin=0; style=invis;
+    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+    aGrupalNombre [shape=ellipse, label=nombre];
+    Grupal -- aGrupalNombre;
+  }
+
+  subgraph clusterAtributosDan {
+    margin=0; style=invis;
+    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+    aDanDan [shape=ellipse, label=dan];
+    Dan -- aDanDan;
+  }
+
+  subgraph clusterAtributosEdad {
+    margin=0; style=invis;
+    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+    aEdadMin [shape=ellipse, label=minima];
+    aEdadMax[shape=ellipse, label=maxima];
+    Edad -- aEdadMin;
+    Edad -- aEdadMax;
+  }
+
+  subgraph clusterAtributosPeso {
+    margin=0; style=invis;
+    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+    aPesoMin [shape=ellipse, label=minimo];
+    aPesoMax[shape=ellipse, label=maximo];
+    Peso -- aPesoMin;
+    Peso -- aPesoMax;
+  }
+
+  subgraph clusterAtributosEsIntegranteDe {
+    margin=0; style=invis;
+    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+    aEsIntegranteDeEsTitular [shape=ellipse, label=esTitular];
+    esIntegranteDe -- aEsIntegranteDeEsTitular;
+  }
+
+  subgraph clusterAtributosEsEn {
+    margin=0; style=invis;
+    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+    aEsEnPuesto [shape=ellipse, label=puesto];
+    esEn -- aEsEnPuesto;
+  }
+
+  subgraph clusterAtributosEsArbitradaPor {
+    margin=0; style=invis;
+    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+    aEsArbitradaPorFuncion [shape=ellipse, label=funcionDelArbitro];
+    esArbitradaPor -- aEsArbitradaPorFuncion;
+  }
+
+  subgraph clusterAtributosPais {
+    margin=0; style=invis;
+    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+    aPaisId [shape=ellipse, label=<<u>idPais</u>>];
+    aPaisNombre [shape=ellipse, label=nombre];
+    Pais -- aPaisId;
+    Pais -- aPaisNombre;
+  }
+
+  subgraph clusterAtributosCategoria {
+    margin=0; style=invis;
+    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+    aCategoriaId [shape=ellipse, label=<<u>idCategoria</u>>];
+    aCategoriaGenero [shape=ellipse, label=genero];
+    Categoria -- aCategoriaId;
+    Categoria -- aCategoriaGenero;
+  }
+
+  subgraph clusterAtributosInscripcion {
+    margin=0; style=invis;
+    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+    aInscripcionId [shape=ellipse, label=<<u>idInscripcion</u>>];
+    Inscripcion -- aInscripcionId;
+  }
+
+  subgraph clusterAtributosRing {
+    margin=0; style=invis;
+    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+    aRingId [shape=ellipse, label=<<u>idRing</u>>];
+    Ring -- aRingId;
+  }
+
+  subgraph clusterAtributosArbitro {
+    margin=0; style=invis;
+    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+    aArbitroId [shape=ellipse, label=<<u>idArbitro</u>>];
+    Arbitro -- aArbitroId;
+  }
+
+  subgraph clusterAtributosCompetencia {
+    margin=0; style=invis;
+    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+    aCompetenciaId [shape=ellipse, label=<<u>idCompetencia</u>>];
+    Competencia -- aCompetenciaId;
+  }
+}
+
+
