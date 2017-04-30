@@ -1,5 +1,6 @@
 digraph MER {
-  overlap = voronoi;
+  layout = sfdp;
+  overlap = false;
   splines = true;
   edge [arrowhead=none];
 
@@ -156,10 +157,12 @@ digraph MER {
   subgraph clusterAtributosMaestro {
     margin=0; style=invis;
     node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
-    aMaestroNombreCompleto [shape=ellipse, label=nombreCompleto];
+    aMaestroNombre [shape=ellipse, label=nombre];
+    aMaestroApellido [shape=ellipse, label=apellido];
     aMaestroGraduacion [shape=ellipse, label=graduacion];
     aMaestroNumeroPlacaDeInstructor [shape=ellipse, label=<<u>placaDeInstructor</u>>];
-    Maestro -> aMaestroNombreCompleto;
+    Maestro -> aMaestroNombre;
+    Maestro -> aMaestroApellido;
     Maestro -> aMaestroGraduacion;
     Maestro -> aMaestroNumeroPlacaDeInstructor;
   }
@@ -167,13 +170,13 @@ digraph MER {
   subgraph clusterAtributosEstudiante {
     margin=0; style=invis;
     node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
-    aEstudianteId [shape=ellipse, label=<<u>idEstudiante</u>>];
-    aEstudianteNombreCompleto [shape=ellipse, label=nombreCompleto];
+    aEstudianteNombre [shape=ellipse, label=nombre];
+    aEstudianteApellido [shape=ellipse, label=apellido];
     aEstudianteGraduacion [shape=ellipse, label=graduacion];
-    aEstudianteCertificadoITF [shape=ellipse, label=numeroCertificadoITF];
+    aEstudianteCertificadoITF [shape=ellipse, label=<<u>numeroCertificadoITF</u>>];
     aEstudianteFoto [shape=ellipse, label="foto?"];
-    Estudiante -> aEstudianteId;
-    Estudiante -> aEstudianteNombreCompleto;
+    Estudiante -> aEstudianteNombre;
+    Estudiante -> aEstudianteApellido;
     Estudiante -> aEstudianteGraduacion;
     Estudiante -> aEstudianteCertificadoITF;
     Estudiante -> aEstudianteFoto;
