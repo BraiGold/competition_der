@@ -1,4 +1,7 @@
 graph MER {
+  overlap = voronoi;
+  splines = true;
+
   // Entidades y relaciones.
   Estudiante [shape=box];
   estudiaEn [shape=diamond];
@@ -18,7 +21,7 @@ graph MER {
   Competencia [shape=box];
 
   subgraph clusterDInscripcion {
-    style=invis;
+    margin=0; style=invis;
     dInscripcion [shape=circle,label=d,fixedsize=false,width=0,height=0,margin=0];
     Individual [shape=box];
     Grupal [shape=box];
@@ -26,12 +29,13 @@ graph MER {
     dInscripcion -- Individual;
     dInscripcion -- Grupal;
 
-    subgraph clusterAtributosGrupal {
-      style=invis;
       node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+      edge [weight=100];
       aGrupalNombre [shape=ellipse, label=nombre];
       Grupal -- aGrupalNombre;
-    }
+
+      aInscripcionId [shape=ellipse, label=<<u>idInscripcion</u>>];
+      Inscripcion -- aInscripcionId;
   }
 
   perteneceA [shape=diamond];
@@ -65,14 +69,7 @@ graph MER {
   esEn -- Competencia [label=M];
 
   subgraph clusterDCompetencia {
-    subgraph clusterAtributosCompetencia {
-      style=invis;
-      node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
-      aCompetenciaId [shape=ellipse, label=<<u>idCompetencia</u>>];
-      Competencia -- aCompetenciaId;
-    }
-
-    style=invis;
+    margin=0; style=invis;
     dCompetencia [shape=circle,label=d,fixedsize=false,width=0,height=0,margin=0];
     Formas [shape=box];
     Combate [shape=box];
@@ -85,22 +82,17 @@ graph MER {
     dCompetencia -- Salto;
     dCompetencia -- Rotura;
     dCompetencia -- CombatePorEquipos;
+
+      node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+      aCompetenciaId [shape=ellipse, label=<<u>idCompetencia</u>>];
+      Competencia -- aCompetenciaId;
   }
 
   Competencia -- perteneceA [label=N];
   perteneceA -- Categoria [label=1];
 
   subgraph clusterOCategoria {
-    subgraph clusterAtributosCategoria {
-      style=invis;
-      node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
-      aCategoriaId [shape=ellipse, label=<<u>idCategoria</u>>];
-      aCategoriaGenero [shape=ellipse, label=genero];
-      Categoria -- aCategoriaId;
-      Categoria -- aCategoriaGenero;
-    }
-
-    style=invis;
+    margin=0; style=invis;
     oCategoria [shape=circle,label=o,fixedsize=false,width=0,height=0,margin=0];
     Dan [shape=box];
     Edad [shape=box];
@@ -110,46 +102,58 @@ graph MER {
     oCategoria -- Edad;
     oCategoria -- Peso;
 
-    subgraph clusterAtributosDan {
-      style=invis;
       node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+
+      aCategoriaId [shape=ellipse, label=<<u>idCategoria</u>>];
+      aCategoriaGenero [shape=ellipse, label=genero];
+      Categoria -- aCategoriaId;
+      Categoria -- aCategoriaGenero;
+
       aDanDan [shape=ellipse, label=dan];
       Dan -- aDanDan;
-    }
 
-    subgraph clusterAtributosEdad {
-      style=invis;
-      node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
       aEdadMin [shape=ellipse, label=minima];
       aEdadMax[shape=ellipse, label=maxima];
       Edad -- aEdadMin;
       Edad -- aEdadMax;
-    }
 
-    subgraph clusterAtributosPeso {
-      style=invis;
-      node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
       aPesoMin [shape=ellipse, label=minimo];
       aPesoMax[shape=ellipse, label=maximo];
       Peso -- aPesoMin;
       Peso -- aPesoMax;
-    }
   }
 
-  Competencia -- esArbitradaPor [label=M];
-  Ring -- esArbitradaPor [label=1];
-  Arbitro -- esArbitradaPor [label=N];
-  Arbitro -- esOriginarioDe [label=N];
-  esOriginarioDe -- Pais [label=1];
+  subgraph clusterArbitraje {
+    margin=0; style=invis;
+    Competencia -- esArbitradaPor [label=M];
+    Ring -- esArbitradaPor [label=1];
+    Arbitro -- esArbitradaPor [label=N];
+    Arbitro -- esOriginarioDe [label=N];
+    esOriginarioDe -- Pais [label=1];
+
+      node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+      aArbitroNombre [shape=ellipse, label=Nombre];
+      aArbitroGraduacion [shape=ellipse, label=graduacion];
+      aArbitroNroPlaca [shape=ellipse, label=<<u>numeroDePlaca</u>>];
+      Arbitro -- aArbitroNombre;
+      Arbitro -- aArbitroGraduacion;
+      Arbitro -- aArbitroNroPlaca;
+
+      aRingId [shape=ellipse, label=<<u>idRing</u>>];
+      Ring -- aRingId;
+
+      aEsArbitradaPorFuncion [shape=ellipse, label=funcionDelArbitro];
+      esArbitradaPor -- aEsArbitradaPorFuncion;
+  }
 
   // Atributos y conectores de conectores
   //   1. Poner de nombre clusterNombre.
   //   2. Agregar:
-  //          style=invis;
+  //          margin=0; style=invis;
   //          node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
   //   TODO: ver como hacer para acortar los edges.
   subgraph clusterAtributosMaestro {
-    style=invis;
+    margin=0; style=invis;
     node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
     aMaestroNombreCompleto [shape=ellipse, label=nombreCompleto];
     aMaestroGraduacion [shape=ellipse, label=graduacion];
@@ -160,7 +164,7 @@ graph MER {
   }
 
   subgraph clusterAtributosEstudiante {
-    style=invis;
+    margin=0; style=invis;
     node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
     aEstudianteId [shape=ellipse, label=<<u>idEstudiante</u>>];
     aEstudianteNombreCompleto [shape=ellipse, label=nombreCompleto];
@@ -175,7 +179,7 @@ graph MER {
   }
 
   subgraph clusterAtributosParticipante {
-    style=invis;
+    margin=0; style=invis;
     node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
     aParticipanteDNI [shape=ellipse, label=DNI];
     aParticipanteFechaDeNac [shape=ellipse, label=fechaDeNacimiento];
@@ -187,66 +191,27 @@ graph MER {
     Participante -- aParticipantePeso;
   }
 
-  subgraph clusterAtributosArbitro {
-    style=invis;
-    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
-    aArbitroNombre [shape=ellipse, label=DNI];
-    aArbitroGraduacion [shape=ellipse, label=fechaDeNacimiento];
-    aArbitroNroPlaca [shape=ellipse, label=<<u>numeroDePlaca</u>>];
-    Arbitro -- aArbitroNombre;
-    Arbitro -- aArbitroGraduacion;
-    Arbitro -- aArbitroNroPlaca;
-  }
-
   subgraph clusterAtributosEsIntegranteDe {
-    style=invis;
+    margin=0; style=invis;
     node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
     aEsIntegranteDeEsTitular [shape=ellipse, label=esTitular];
     esIntegranteDe -- aEsIntegranteDeEsTitular;
   }
 
   subgraph clusterAtributosEsEn {
-    style=invis;
+    margin=0; style=invis;
     node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
     aEsEnPuesto [shape=ellipse, label=puesto];
     esEn -- aEsEnPuesto;
   }
 
-  subgraph clusterAtributosEsArbitradaPor {
-    style=invis;
-    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
-    aEsArbitradaPorFuncion [shape=ellipse, label=funcionDelArbitro];
-    esArbitradaPor -- aEsArbitradaPorFuncion;
-  }
-
   subgraph clusterAtributosPais {
-    style=invis;
+    margin=0; style=invis;
     node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
     aPaisId [shape=ellipse, label=<<u>idPais</u>>];
     aPaisNombre [shape=ellipse, label=nombre];
     Pais -- aPaisId;
     Pais -- aPaisNombre;
-  }
-
-  subgraph clusterAtributosInscripcion {
-    style=invis;
-    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
-    aInscripcionId [shape=ellipse, label=<<u>idInscripcion</u>>];
-    Inscripcion -- aInscripcionId;
-  }
-
-  subgraph clusterAtributosRing {
-    style=invis;
-    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
-    aRingId [shape=ellipse, label=<<u>idRing</u>>];
-    Ring -- aRingId;
-  }
-
-  subgraph clusterAtributosArbitro {
-    style=invis;
-    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
-    aArbitroId [shape=ellipse, label=<<u>idArbitro</u>>];
-    Arbitro -- aArbitroId;
   }
 }
 
