@@ -5,14 +5,14 @@ graph MER {
   Escuela [shape=box];
   esDirigidaPor [shape=diamond];
   Maestro [shape=box];
-  oEstudiante [shape=circle,label=o];
+  oEstudiante [shape=circle,label=o,fixedsize=false,width=0,height=0,margin=0];
   Participante [shape=box];
   Coach [shape=box];
 
   Inscripcion [shape=box];
   esIntegranteDe [shape=diamond];
   coacheaA [shape=diamond];
-  dInscripcion [shape=circle,label=d];
+  dInscripcion [shape=circle,label=d,fixedsize=false,width=0,height=0,margin=0];
   Individual [shape=box];
   Grupal [shape=box];
   esEn [shape=diamond];
@@ -20,7 +20,7 @@ graph MER {
 
   perteneceA [shape=diamond];
   Categoria [shape=box];
-  oCategoria [shape=circle,label=o];
+  oCategoria [shape=circle,label=o,fixedsize=false,width=0,height=0,margin=0];
   Dan [shape=box];
   Edad [shape=box];
   Peso [shape=box];
@@ -29,7 +29,7 @@ graph MER {
   seEncuentraEn [shape=diamond];
   esOriginarioDe [shape=diamond];
 
-  dCompetencia [shape=circle,label=d];
+  dCompetencia [shape=circle,label=d,fixedsize=false,width=0,height=0,margin=0];
   Formas [shape=box];
   Combate [shape=box];
   Salto [shape=box];
