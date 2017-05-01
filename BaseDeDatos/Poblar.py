@@ -65,25 +65,30 @@ def generarParticipantes(est):
 def generarCompetencia():
 
     tipos = ["F", "C", "S", "R", "cE"]
-    cats = generarCategoria()
+    cats, ta = generarCategoria()
     comps = [ (i, *r) for i, r in enumerate([ (c[0], npr.randint(1, 5), t)
                                              for t in tipos
                                              for c in cats[t]])]
-    modalidades = [ map(lambda x: x[0], (filter(lambda c: c[-1] == t, comps))) for t in tipos]
+    modalidades = [ map(lambda x: (x[0],), (filter(lambda c: c[-1] == t, comps))) for t in tipos]
     return comps, modalidades
 
 def generarCategoria():
 
     i = 0
-    FS = [ (i + j, *r) for j, r in enumerate([ (s, cE) for s in ["M", "F"] for cE in generarCatEdad()]) ]
+    FS = [ (i + j, *r) for j, r in enumerate([ (s, cE[0], cE[1]) for s in ["M", "F"] for cE in generarCatEdad()]) ]
+    EC = list(map(lambda x: (x[0], x[2], x[3]), FS))
     i += len(FS)
-    C = [ (i + j, *r) for j, r in enumerate([ (s, cE, p) for s in ["M", "F"] 
+    C = [ (i + j, *r) for j, r in enumerate([ (s, cE[0], cE[1], p[0], p[1]) for s in ["M", "F"] 
                                              for cE in generarCatEdad() 
                                              for p in generarCatPeso()]) ]
+    EC += list(map(lambda x: (x[0], x[2], x[3]), C))
+    PC = list(map(lambda x: (x[0], x[4], x[5]), C) )
     i += len(C)
     RcE = [ (i + j, *r) for j, r in enumerate([ (s,) for s in ["M", "F"] ]) ]
     i += len(RcE)
-    return { "F": FS, "S": FS, "C": C, "R": RcE, "cE": RcE }
+    def f(l):
+        return list(map(lambda x: (x[0], x[1]), l))
+    return { "F": f(FS), "S": f(FS), "C": f(C), "R": f(RcE), "cE": f(RcE) }, [EC, PC]
 
 def generarCatDan():
 
@@ -97,28 +102,75 @@ def generarCatPeso():
 
     return [ v for v in [(10 * i, 10 * i + 9) for i in range(5, 7) ]]
 
+def generarArbitro():
+
+    carac = [ (d, p[0])
+            for d in range(1, 7)
+            for p in generarPaises()]
+    return [ (i, *rest) for i, rest in enumerate([ (n, a, *choice(carac))
+                                                 for n in listaNombres
+                                                 for a in listaApellidos])]
+
+def generarRing():
+
+    return range(6)
+
 
 estudiantes = generarEstudiante()
 part, coaches = generarParticipantes(estudiantes)
-generarCompetencia()
+comp, mod = generarCompetencia()
+cat, catD = generarCategoria()
 
-#conn = sqlite3.connect('DB.db')
-#c = conn.cursor()
-#
-#c.executemany('insert into Pais values (?,?)', generarPaises())
-#conn.commit()
-#
-#c.executemany('insert into Maestro values (?,?,?,?,?)', generarMaestro())
-#conn.commit()
-#
-#c.executemany('insert into Escuela values (?,?)', generarEscuela())
-#conn.commit()
-#
-#c.executemany('insert into Estudiante values (?,?,?,?,?,?,?,?)', estudiantes)
-#conn.commit()
-#
-#c.executemany('insert into Participante values (?,?,?)', part)
-#conn.commit()
-#
-#c.executemany('insert into Coach values (?)', coaches)
-#conn.commit()
+conn = sqlite3.connect('DB.db')
+c = conn.cursor()
+
+c.executemany('insert into Pais values (?,?)', generarPaises())
+conn.commit()
+
+c.executemany('insert into Maestro values (?,?,?,?,?)', generarMaestro())
+conn.commit()
+
+c.executemany('insert into Escuela values (?,?)', generarEscuela())
+conn.commit()
+
+c.executemany('insert into Estudiante values (?,?,?,?,?,?,?,?)', estudiantes)
+conn.commit()
+
+c.executemany('insert into Participante values (?,?,?)', part)
+conn.commit()
+
+c.executemany('insert into Coach values (?)', coaches)
+conn.commit()
+
+c.executemany('insert into Competencia values (?,?,?,?)', comp)
+conn.commit()
+
+c.executemany('insert into CompetenciaFormas values (?)', mod[0])
+conn.commit()
+
+c.executemany('insert into CompetenciaCombate values (?)', mod[1])
+conn.commit()
+
+c.executemany('insert into CompetenciaSalto values (?)', mod[2])
+conn.commit()
+
+c.executemany('insert into CompetenciaRotura values (?)', mod[3])
+conn.commit()
+
+c.executemany('insert into CompetenciaCombatePorEquipos values (?)', mod[4])
+conn.commit()
+
+c.executemany('insert into Categoria values (?,?)', cat["F"])
+conn.commit()
+
+c.executemany('insert into Categoria values (?,?)', cat["C"])
+conn.commit()
+
+c.executemany('insert into Categoria values (?,?)', cat["cE"])
+conn.commit()
+
+c.executemany('insert into CategoriaEdad values (?,?,?)', catD[0])
+conn.commit()
+
+c.executemany('insert into CategoriaPeso values (?,?,?)', catD[1])
+conn.commit()
