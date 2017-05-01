@@ -62,10 +62,15 @@ def generarParticipantes(est):
                                                          #de un solo valor
     return part, coaches
 
-#def generarCompetencia():
-#
-#    pass
-#    #[ (i, generarCat(i, t), npr.randint(1, 5), choice(["F", "C", "S", "R", "CE"])) for i, r in enumerate(
+def generarCompetencia():
+
+    tipos = ["F", "C", "S", "R", "cE"]
+    cats = generarCategoria()
+    comps = [ (i, *r) for i, r in enumerate([ (c[0], npr.randint(1, 5), t)
+                                             for t in tipos
+                                             for c in cats[t]])]
+    modalidades = [ map(lambda x: x[0], (filter(lambda c: c[-1] == t, comps))) for t in tipos]
+    return comps, modalidades
 
 def generarCategoria():
 
@@ -78,7 +83,7 @@ def generarCategoria():
     i += len(C)
     RcE = [ (i + j, *r) for j, r in enumerate([ (s,) for s in ["M", "F"] ]) ]
     i += len(RcE)
-    return { "F/S": FS, "C": C, "R/cE": RcE }
+    return { "F": FS, "S": FS, "C": C, "R": RcE, "cE": RcE }
 
 def generarCatDan():
 
@@ -95,7 +100,7 @@ def generarCatPeso():
 
 estudiantes = generarEstudiante()
 part, coaches = generarParticipantes(estudiantes)
-generarCategoria()
+generarCompetencia()
 
 #conn = sqlite3.connect('DB.db')
 #c = conn.cursor()
