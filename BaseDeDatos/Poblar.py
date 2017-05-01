@@ -53,12 +53,10 @@ def generarEstudiante():
 
 def generarParticipantes(est):
 
-    inter = [ (npr.choice(["P", "C", "PC"]), e[0]) for e in est ]
-    part  = [ (e, *(npr.randint(10**7, 3*(10**7)), 
+    part  = [ (e[0], *(npr.randint(10**7, 3*(10**7)), 
                      "%d/%d/%d" % (npr.randint(1, 28), npr.randint(1, 13), 1980 + npr.randint(15))))
-               for (v, e) in inter if ("P" in v) ]
-    coaches = [ (e,) for (v, e) in inter if ("C" in v) ] #clave la coma -- tiene que ser una tupla, aunque sea
-                                                         #de un solo valor
+               for e in est]
+    coaches = [ (e[0],) for e in est] #clave la coma -- tiene que ser una tupla, aunque sea de un solo valor
     return part, coaches
 
 def generarCompetencia(cats):
