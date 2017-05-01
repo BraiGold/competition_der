@@ -1,18 +1,18 @@
 \par País (\underline{idPaís}, nombre)
 
-\par Maestro (\underline{númPlacaInstructor}, nombre, apellido, graduación, \dotuline{idPaís})
-\par Escuela (\underline{idEscuela}, nombre, \dotuline{idMaestro})
+\par Maestro (\underline{placaInstructor}, nombre, apellido, graduación, \dotuline{idPaís})
+\par Escuela (\underline{idEscuela}, \dotuline{idMaestro})
 
 \par Estudiante (\underline{númCertificado}, nombre, apellido, género, graduación, peso, foto, \dotuline{idEscuela})
-\par Participante (\underline{\dotuline{númCertificado}}, documentoDeIdentidad, fechaDeNacimiento)
+\par Participante (\underline{\dotuline{númCertificado}}, DNI, fechaDeNacimiento)
 \par Coach (\underline{\dotuline{númCertificado}})
 
 \par esIntegranteDe (\underline{\dotuline{númCertificado}}, \underline{\dotuline{idInscripción}}, esTitular)
-\par Inscripción (\underline{idInscripción}, nombre, \dotuline{idCoach}, grupalOIndividual)
+\par Inscripción (\underline{idInscripción}, \dotuline{idCoach}, grupalOIndividual)
 \par InscripciónIndividual (\underline{\dotuline{idInscripción}})
 \par InscripciónGrupal (\underline{\dotuline{idInscripción}}, nombre)
 
-\par esEn (\underline{\dotuline{idInscripción}}, \underline{\dotuline{idCompetencia}})
+\par esEn (\underline{\dotuline{idInscripción}}, \underline{\dotuline{idCompetencia}}, puesto)
 
 \par Competencia (\underline{idCompetencia}, \dotuline{idCategoría}, cantidadDeÁrbitros, tipo)
 \par CompetenciaFormas (\underline{\dotuline{idCompetencia}})
@@ -23,10 +23,10 @@
 
 \par Categoría (\underline{idCategoría}, género)
 \par CategoríaDan (\underline{\dotuline{idCategoría}}, dan)
-\par CategoríaEdad (\underline{\dotuline{idCategoría}}, mín, máx)
-\par CategoríaPeso (\underline{\dotuline{idCategoría}}, mín, máx)
+\par CategoríaEdad (\underline{\dotuline{idCategoría}}, mínima, máxima)
+\par CategoríaPeso (\underline{\dotuline{idCategoría}}, mínimo, máximo)
 
 \par Ring (\underline{númeroDeRing})
-\par Árbitro (\underline{númPlacaÁrbitro}, nombre, apellido, graduación, \dotuline{idPaís})
+\par Árbitro (\underline{númDePlaca}, nombre, apellido, graduación, \dotuline{idPaís})
 
-\par esArbitradaPor (\underline{\dotuline{idCategoría}}, \underline{\dotuline{númPlacaÁrbitro}}, \dotuline{númeroDeRing}, función)
+\par esArbitradaPor (\underline{\dotuline{idCategoría}}, \underline{\dotuline{númDePlacaÁrbitro}}, \dotuline{númeroDeRing}, funciónDelÁrbitro)
