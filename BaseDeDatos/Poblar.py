@@ -113,7 +113,7 @@ def generarArbitro():
 
 def generarRing():
 
-    return range(6)
+    return [ (i,) for i in range(6)]
 
 
 estudiantes = generarEstudiante()
@@ -174,3 +174,10 @@ conn.commit()
 
 c.executemany('insert into CategoriaPeso values (?,?,?)', catD[1])
 conn.commit()
+
+c.executemany('insert into Arbitro values (?,?,?,?,?)', generarArbitro())
+conn.commit()
+
+c.executemany('insert into Ring values (?)', generarRing())
+conn.commit()
+
