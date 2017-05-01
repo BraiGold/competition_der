@@ -45,8 +45,7 @@ def generarEstudiante():
     carac = [ (s, d, p, f, e)
             for s in ["M", "F"]
             for d in range(1, 7)
-            #for p in [(4 + i) * 10 for i in range(l)]
-            for p in [50, 60] #placeholder
+            for p in [50, 60] 
             for e in range(len(list(generarEscuela())))] 
     return [ (i, *rest) for i, rest in enumerate([ (n, a, *choice(carac))
                                                  for n in listaNombres
@@ -62,11 +61,10 @@ def generarParticipantes(est):
                                                          #de un solo valor
     return part, coaches
 
-def generarCompetencia():
+def generarCompetencia(cats):
 
     tipos = ["F", "C", "S", "R", "cE"]
-    cats, ta = generarCategoria()
-    comps = [ (i, *r) for i, r in enumerate([ (c[0], npr.randint(1, 5), t)
+    comps = [ (i, *r) for i, r in enumerate([ (c[0], 1, t)
                                              for t in tipos
                                              for c in cats[t]])]
     modalidades = [ map(lambda x: (x[0],), (filter(lambda c: c[-1] == t, comps))) for t in tipos]
@@ -111,6 +109,14 @@ def generarArbitro():
                                                  for n in listaNombres
                                                  for a in listaApellidos])]
 
+def generarEsArbPor(c, a, r):
+
+    res = [ (C[0], a[0][0], r[0][0], "PresidenteDeMesa") for C in c ]
+    res += [ (C[0], a[1][0], r[0][0], "Central") for C in c ]
+    res += [ (C[0], A[0], r[0][0], "Suplente") for C in c for A in a[2:4] ]
+    res += [ (C[0], a[5][0], r[0][0], "Juez") for C in c ]
+    return res
+
 def generarRing():
 
     return [ (i,) for i in range(6)]
@@ -118,66 +124,72 @@ def generarRing():
 
 estudiantes = generarEstudiante()
 part, coaches = generarParticipantes(estudiantes)
-comp, mod = generarCompetencia()
 cat, catD = generarCategoria()
+comp, mod = generarCompetencia(cat)
+arb = generarArbitro()
+rings = generarRing()
+esAPor = generarEsArbPor(comp, arb, rings)
 
-conn = sqlite3.connect('DB.db')
-c = conn.cursor()
-
-c.executemany('insert into Pais values (?,?)', generarPaises())
-conn.commit()
-
-c.executemany('insert into Maestro values (?,?,?,?,?)', generarMaestro())
-conn.commit()
-
-c.executemany('insert into Escuela values (?,?)', generarEscuela())
-conn.commit()
-
-c.executemany('insert into Estudiante values (?,?,?,?,?,?,?,?)', estudiantes)
-conn.commit()
-
-c.executemany('insert into Participante values (?,?,?)', part)
-conn.commit()
-
-c.executemany('insert into Coach values (?)', coaches)
-conn.commit()
-
-c.executemany('insert into Competencia values (?,?,?,?)', comp)
-conn.commit()
-
-c.executemany('insert into CompetenciaFormas values (?)', mod[0])
-conn.commit()
-
-c.executemany('insert into CompetenciaCombate values (?)', mod[1])
-conn.commit()
-
-c.executemany('insert into CompetenciaSalto values (?)', mod[2])
-conn.commit()
-
-c.executemany('insert into CompetenciaRotura values (?)', mod[3])
-conn.commit()
-
-c.executemany('insert into CompetenciaCombatePorEquipos values (?)', mod[4])
-conn.commit()
-
-c.executemany('insert into Categoria values (?,?)', cat["F"])
-conn.commit()
-
-c.executemany('insert into Categoria values (?,?)', cat["C"])
-conn.commit()
-
-c.executemany('insert into Categoria values (?,?)', cat["cE"])
-conn.commit()
-
-c.executemany('insert into CategoriaEdad values (?,?,?)', catD[0])
-conn.commit()
-
-c.executemany('insert into CategoriaPeso values (?,?,?)', catD[1])
-conn.commit()
-
-c.executemany('insert into Arbitro values (?,?,?,?,?)', generarArbitro())
-conn.commit()
-
-c.executemany('insert into Ring values (?)', generarRing())
-conn.commit()
-
+#conn = sqlite3.connect('DB.db')
+#c = conn.cursor()
+#
+#c.executemany('insert into Pais values (?,?)', generarPaises())
+#conn.commit()
+#
+#c.executemany('insert into Maestro values (?,?,?,?,?)', generarMaestro())
+#conn.commit()
+#
+#c.executemany('insert into Escuela values (?,?)', generarEscuela())
+#conn.commit()
+#
+#c.executemany('insert into Estudiante values (?,?,?,?,?,?,?,?)', estudiantes)
+#conn.commit()
+#
+#c.executemany('insert into Participante values (?,?,?)', part)
+#conn.commit()
+#
+#c.executemany('insert into Coach values (?)', coaches)
+#conn.commit()
+#
+#c.executemany('insert into Competencia values (?,?,?,?)', comp)
+#conn.commit()
+#
+#c.executemany('insert into CompetenciaFormas values (?)', mod[0])
+#conn.commit()
+#
+#c.executemany('insert into CompetenciaCombate values (?)', mod[1])
+#conn.commit()
+#
+#c.executemany('insert into CompetenciaSalto values (?)', mod[2])
+#conn.commit()
+#
+#c.executemany('insert into CompetenciaRotura values (?)', mod[3])
+#conn.commit()
+#
+#c.executemany('insert into CompetenciaCombatePorEquipos values (?)', mod[4])
+#conn.commit()
+#
+#c.executemany('insert into Categoria values (?,?)', cat["F"])
+#conn.commit()
+#
+#c.executemany('insert into Categoria values (?,?)', cat["C"])
+#conn.commit()
+#
+#c.executemany('insert into Categoria values (?,?)', cat["cE"])
+#conn.commit()
+#
+#c.executemany('insert into CategoriaEdad values (?,?,?)', catD[0])
+#conn.commit()
+#
+#c.executemany('insert into CategoriaPeso values (?,?,?)', catD[1])
+#conn.commit()
+#
+#c.executemany('insert into Arbitro values (?,?,?,?,?)', arb)
+#conn.commit()
+#
+#c.executemany('insert into Ring values (?)', rings)
+#conn.commit()
+#
+#c.executemany('insert into esArbitradaPor values (?,?,?,?)', esAPor)
+#conn.commit()
+#
