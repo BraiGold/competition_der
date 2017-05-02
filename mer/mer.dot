@@ -1,5 +1,4 @@
 digraph MER {
-  layout = sfdp;
   overlap = false;
   splines = true;
   edge [arrowhead=none];
@@ -87,7 +86,9 @@ digraph MER {
 
       node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
       aCompetenciaId [shape=ellipse, label=<<u>idCompetencia</u>>];
+      aCompetenciaCantArbitros [shape=ellipse, label=cantidadDeArbitros];
       Competencia -> aCompetenciaId;
+      Competencia -> aCompetenciaCantArbitros;
   }
 
   Competencia -> perteneceA [label=N];
