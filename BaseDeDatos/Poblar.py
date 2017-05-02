@@ -128,66 +128,66 @@ arb = generarArbitro()
 rings = generarRing()
 esAPor = generarEsArbPor(comp, arb, rings)
 
-#conn = sqlite3.connect('DB.db')
-#c = conn.cursor()
-#
-#c.executemany('insert into Pais values (?,?)', generarPaises())
-#conn.commit()
-#
-#c.executemany('insert into Maestro values (?,?,?,?,?)', generarMaestro())
-#conn.commit()
-#
-#c.executemany('insert into Escuela values (?,?)', generarEscuela())
-#conn.commit()
-#
-#c.executemany('insert into Estudiante values (?,?,?,?,?,?,?,?)', estudiantes)
-#conn.commit()
-#
-#c.executemany('insert into Participante values (?,?,?)', part)
-#conn.commit()
-#
-#c.executemany('insert into Coach values (?)', coaches)
-#conn.commit()
-#
-#c.executemany('insert into Competencia values (?,?,?,?)', comp)
-#conn.commit()
-#
-#c.executemany('insert into CompetenciaFormas values (?)', mod[0])
-#conn.commit()
-#
-#c.executemany('insert into CompetenciaCombate values (?)', mod[1])
-#conn.commit()
-#
-#c.executemany('insert into CompetenciaSalto values (?)', mod[2])
-#conn.commit()
-#
-#c.executemany('insert into CompetenciaRotura values (?)', mod[3])
-#conn.commit()
-#
-#c.executemany('insert into CompetenciaCombatePorEquipos values (?)', mod[4])
-#conn.commit()
-#
-#c.executemany('insert into Categoria values (?,?)', cat["F"])
-#conn.commit()
-#
-#c.executemany('insert into Categoria values (?,?)', cat["C"])
-#conn.commit()
-#
-#c.executemany('insert into Categoria values (?,?)', cat["cE"])
-#conn.commit()
-#
-#c.executemany('insert into CategoriaEdad values (?,?,?)', catD[0])
-#conn.commit()
-#
-#c.executemany('insert into CategoriaPeso values (?,?,?)', catD[1])
-#conn.commit()
-#
-#c.executemany('insert into Arbitro values (?,?,?,?,?)', arb)
-#conn.commit()
-#
-#c.executemany('insert into Ring values (?)', rings)
-#conn.commit()
-#
-#c.executemany('insert into esArbitradaPor values (?,?,?,?)', esAPor)
-#conn.commit()
-#
+conn = sqlite3.connect('DB.db')
+c = conn.cursor()
+
+c.executemany('insert into Pais values (?,?)', generarPaises())
+conn.commit()
+
+c.executemany('insert into Maestro values (?,?,?,?,?)', generarMaestro())
+conn.commit()
+
+c.executemany('insert into Escuela values (?,?)', generarEscuela())
+conn.commit()
+
+c.executemany('insert into Estudiante values (?,?,?,?,?,?,?,?)', estudiantes)
+conn.commit()
+
+c.executemany('insert into Participante values (?,?,?)', part)
+conn.commit()
+
+c.executemany('insert into Coach values (?)', coaches)
+conn.commit()
+
+c.executemany('insert into Competencia values (?,?,?,?)', comp)
+conn.commit()
+
+c.executemany('insert into CompetenciaFormas values (?)', mod[0])
+conn.commit()
+
+c.executemany('insert into CompetenciaCombate values (?)', mod[1])
+conn.commit()
+
+c.executemany('insert into CompetenciaSalto values (?)', mod[2])
+conn.commit()
+
+c.executemany('insert into CompetenciaRotura values (?)', mod[3])
+conn.commit()
+
+c.executemany('insert into CompetenciaCombatePorEquipos values (?)', mod[4])
+conn.commit()
+
+c.executemany('insert into Categoria values (?,?)', cat["F"])
+conn.commit()
+
+c.executemany('insert into Categoria values (?,?)', cat["C"])
+conn.commit()
+
+c.executemany('insert into Categoria values (?,?)', cat["cE"])
+conn.commit()
+
+c.executemany('insert into CategoriaEdad values (?,?,?)', catD[0])
+conn.commit()
+
+c.executemany('insert into CategoriaPeso values (?,?,?)', catD[1])
+conn.commit()
+
+c.executemany('insert into Arbitro values (?,?,?,?,?)', arb)
+conn.commit()
+
+c.executemany('insert into Ring values (?)', rings)
+conn.commit()
+
+c.executemany('insert into esArbitradaPor values (?,?,?,?)', esAPor)
+conn.commit()
+
