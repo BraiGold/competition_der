@@ -129,6 +129,7 @@ def generarInscripciones(estudiantes, participantes, coaches, competencias,cat, 
     puestos_competencias = {}
     categorias = cat["F"] + cat["cE"] + cat["C"]
     # Individuales
+    ultimo_id = 0
     for i in range(len(estudiantes)):
         for j in range(len(estudiantes)):
             if i == j or estudiantes[i][7] != estudiantes[j][7]:
@@ -166,7 +167,21 @@ def generarInscripciones(estudiantes, participantes, coaches, competencias,cat, 
                 else:
                     esen.append((x[0], id_, puestos_competencias[(x[0], id_)]))
                     puestos_competencias[(x[0], id_, 1)] += 1
+                ultimo_id = id_
                 competencia_i += 1
+
+    inscripciones.append((ultimo_id + 1, 1, 2))
+    grupal.append((ultimo_id + 1, ))
+    esintegrantede.append((3, ultimo_id + 1, True))
+    esintegrantede.append((8, ultimo_id + 1, True))
+    esintegrantede.append((11, ultimo_id + 1, True))
+    esintegrantede.append((12, ultimo_id + 1, True))
+    esintegrantede.append((13, ultimo_id + 1, True))
+    esintegrantede.append((16, ultimo_id + 1, False))
+    esintegrantede.append((17, ultimo_id + 1, False))
+    esintegrantede.append((21, ultimo_id + 1, False))
+    esen.append((26, ultimo_id + 1, 1))
+
     return inscripciones, individual, grupal, esintegrantede, esen
 
 flatten = lambda l: [item for sublist in l for item in sublist]
