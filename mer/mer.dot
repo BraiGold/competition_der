@@ -176,11 +176,13 @@ digraph MER {
     aEstudianteGraduacion [shape=ellipse, label=graduacion];
     aEstudianteCertificadoITF [shape=ellipse, label=<<u>numeroCertificadoITF</u>>];
     aEstudianteFoto [shape=ellipse, label="foto?"];
+    aEstudiantePeso [shape=ellipse, label=peso];
     Estudiante -> aEstudianteNombre;
     Estudiante -> aEstudianteApellido;
     Estudiante -> aEstudianteGraduacion;
     Estudiante -> aEstudianteCertificadoITF;
     Estudiante -> aEstudianteFoto;
+    Estudiante -> aEstudiantePeso;
   }
 
   subgraph clusterAtributosParticipante {
@@ -189,11 +191,9 @@ digraph MER {
     aParticipanteDNI [shape=ellipse, label=DNI];
     aParticipanteFechaDeNac [shape=ellipse, label=fechaDeNacimiento];
     aParticipanteGenero [shape=ellipse, label=genero];
-    aParticipantePeso [shape=ellipse, label=peso];
     Participante -> aParticipanteDNI;
     Participante -> aParticipanteFechaDeNac;
     Participante -> aParticipanteGenero;
-    Participante -> aParticipantePeso;
   }
 
   subgraph clusterAtributosEsIntegranteDe {

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import sqlite3
-from random import seed, choice 
+from random import seed, choice
 import numpy.random as npr
 seed(42)
 npr.seed(42)
@@ -45,15 +45,15 @@ def generarEstudiante():
     carac = [ (s, d, p, f, e)
             for s in ["M", "F"]
             for d in range(1, 7)
-            for p in [50, 60] 
-            for e in range(len(list(generarEscuela())))] 
+            for p in [50, 60]
+            for e in range(len(list(generarEscuela())))]
     return [ (i, *rest) for i, rest in enumerate([ (n, a, *choice(carac))
                                                  for n in listaNombres
                                                  for a in listaApellidos])]
 
 def generarParticipantes(est):
 
-    part  = [ (e[0], *(npr.randint(10**7, 3*(10**7)), 
+    part  = [ (e[0], *(npr.randint(10**7, 3*(10**7)),
                      "%d/%d/%d" % (npr.randint(1, 28), npr.randint(1, 13), 1980 + npr.randint(15))))
                for e in est]
     coaches = [ (e[0],) for e in est] #clave la coma -- tiene que ser una tupla, aunque sea de un solo valor
@@ -74,8 +74,8 @@ def generarCategoria():
     FS = [ (i + j, *r) for j, r in enumerate([ (s, cE[0], cE[1]) for s in ["M", "F"] for cE in generarCatEdad()]) ]
     EC = list(map(lambda x: (x[0], x[2], x[3]), FS))
     i += len(FS)
-    C = [ (i + j, *r) for j, r in enumerate([ (s, cE[0], cE[1], p[0], p[1]) for s in ["M", "F"] 
-                                             for cE in generarCatEdad() 
+    C = [ (i + j, *r) for j, r in enumerate([ (s, cE[0], cE[1], p[0], p[1]) for s in ["M", "F"]
+                                             for cE in generarCatEdad()
                                              for p in generarCatPeso()]) ]
     EC += list(map(lambda x: (x[0], x[2], x[3]), C))
     PC = list(map(lambda x: (x[0], x[4], x[5]), C) )
@@ -119,6 +119,58 @@ def generarRing():
 
     return [ (i,) for i in range(6)]
 
+def generarInscripciones(estudiantes, participantes, coaches, competencias,cat, catD):
+    inscripciones = []
+    individual = []
+    grupal = []
+    esintegrantede = []
+    esen = []
+
+    puestos_competencias = {}
+    categorias = cat["F"] + cat["cE"] + cat["C"]
+    # Individuales
+    for i in range(len(estudiantes)):
+        for j in range(len(estudiantes)):
+            if i == j or estudiantes[i][7] != estudiantes[j][7]:
+                continue
+            estudiante = estudiantes[j]
+            edad_e = 2017 - int(participantes[i][2][-4:])
+            competencia_i  =  0
+            for x in competencias:
+                categoria = categorias[x[1]]
+                if categoria[1] != estudiante[3]:
+                    continue
+                salir = False
+                for dan in []:
+                    if categoria[0] == dan[0] and dan[1] != estudiante[4]:
+                        salir = True
+                    if salir: break
+                if salir: continue
+                for edad in catD[0]:
+                    if categoria[0] == edad[0] and edad[1] <= edad_e <= edad[2]:
+                        salir = True
+                    if salir: break
+                if salir: continue
+                for peso in catD[1]:
+                    if categoria[0] == peso[0] and peso[1] <= estudiante[5] <= peso[2]:
+                        salir = True
+                    if salir: break
+                if salir: continue
+                id_ = (i + j * len(estudiantes)) * len(competencias) + competencia_i
+                inscripciones.append((id_, i, 1))
+                individual.append((id_, ))
+                esintegrantede.append((estudiantes[i][0], id_, True))
+                if (x[0], id_) not in puestos_competencias:
+                    esen.append((x[0], id_, 1))
+                    puestos_competencias[(x[0], id_)] = 2
+                else:
+                    esen.append((x[0], id_, puestos_competencias[(x[0], id_)]))
+                    puestos_competencias[(x[0], id_, 1)] += 1
+                competencia_i += 1
+    return inscripciones, individual, grupal, esintegrantede, esen
+
+flatten = lambda l: [item for sublist in l for item in sublist]
+
 
 estudiantes = generarEstudiante()
 part, coaches = generarParticipantes(estudiantes)
@@ -127,6 +179,7 @@ comp, mod = generarCompetencia(cat)
 arb = generarArbitro()
 rings = generarRing()
 esAPor = generarEsArbPor(comp, arb, rings)
+inscripciones,individual,grupal,esintegrantede,esen = generarInscripciones(estudiantes,part, coaches,comp,cat, catD)
 
 conn = sqlite3.connect('DB.db')
 c = conn.cursor()
@@ -189,5 +242,17 @@ c.executemany('insert into Ring values (?)', rings)
 conn.commit()
 
 c.executemany('insert into esArbitradaPor values (?,?,?,?)', esAPor)
+conn.commit()
+
+c.executemany('insert into inscripcion values(?,?,?)', inscripciones)
+conn.commit()
+
+c.executemany('insert into inscripcionindividual  values(?)', individual)
+conn.commit()
+
+c.executemany('insert into esintegrantede values(?,?,?)', esintegrantede)
+conn.commit()
+
+c.executemany('insert into esen values(?,?,?)', esen)
 conn.commit()
 
