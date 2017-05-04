@@ -21,3 +21,12 @@ CREATE TRIGGER unSoloTeam AFTER INSERT ON esIntegranteDe
                 Where eid.numCertificado = new.numCertificado And new.idInscripcion != eid.idInscripcion
                 And i.idInscripcion = eid.idInscripcion And i.GrupalOIndividual = "G");
     END;
+
+CREATE TRIGGER noSelfCoach AFTER INSERT ON esIntegranteDe
+    BEGIN
+        Select Raise(Rollback, "Un participante no puede coachearse a sí mismo.")
+        Where Exists (Select 1 From Inscripcion i, Estudiante e
+                Where new.idInscripcion = i.idInscripcion And 
+                i.idCoach = e.numCertificado
+            And e.numCertificado = new.numCertificado);
+    END;
