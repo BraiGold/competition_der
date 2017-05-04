@@ -88,7 +88,8 @@ CREATE TRIGGER cumpleConLaCategoria AFTER INSERT ON esIntegranteDe
         Where e.numCertificado = new.numCertificado And p.numCertificado = new.numCertificado 
         And new.idInscripcion = i.idInscripcion And i.idInscripcion = es.idInscripcion 
         And es.idCompetencia = comp.idCompetencia And comp.idCategoria = c.idCategoria
-        And (Exists (Select 1 From CategoriaPeso cP Where c.idCategoria = cP.idCategoria And 
+        And (e.genero != c.genero
+        Or Exists (Select 1 From CategoriaPeso cP Where c.idCategoria = cP.idCategoria And 
                 (cP.minimo > e.peso Or cP.maximo < e.peso))
         Or Exists (Select 1 From CategoriaEdad cP Where c.idCategoria = cP.idCategoria And 
                 (cP.minima > (2017 - p.fechaDeNacimiento) Or cP.maxima < (2017 - p.fechaDeNacimiento)))
