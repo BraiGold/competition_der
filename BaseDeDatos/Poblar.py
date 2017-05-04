@@ -53,9 +53,7 @@ def generarEstudiante():
 
 def generarParticipantes(est):
 
-    part  = [ (e[0], *(npr.randint(10**7, 3*(10**7)),
-                     "%d/%d/%d" % (npr.randint(1, 28), npr.randint(1, 13), 1980 + npr.randint(15))))
-               for e in est]
+    part  = [ (e[0], *(npr.randint(10**7, 3*(10**7)), 1980 + npr.randint(15))) for e in est]
     coaches = [ (e[0],) for e in est] #clave la coma -- tiene que ser una tupla, aunque sea de un solo valor
     return part, coaches
 
@@ -135,7 +133,7 @@ def generarInscripciones(estudiantes, participantes, coaches, competencias,cat, 
             if i == j or estudiantes[i][7] != estudiantes[j][7]:
                 continue
             estudiante = estudiantes[j]
-            edad_e = 2017 - int(participantes[i][2][-4:])
+            edad_e = 2017 - participantes[i][2]
             competencia_i  =  0
             for x in competencias:
                 categoria = categorias[x[1]]

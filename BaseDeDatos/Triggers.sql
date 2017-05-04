@@ -80,3 +80,18 @@ CREATE TRIGGER categoriaCorrectaCombatePorEquipos AFTER INSERT ON Competencia
         Or c.idCategoria in (Select cP.idCategoria From CategoriaEdad cP)
         Or c.idCategoria in (Select cP.idCategoria From CategoriaDan cP));
     END;
+
+CREATE TRIGGER cumpleConLaCategoria AFTER INSERT ON esIntegranteDe
+    BEGIN
+        Select Raise(Rollback, "El participante no cumple con las categorías de la competencia.")
+        From Estudiante e, Participante p, Inscripcion i, esEn es, Competencia comp, Categoria c
+        Where e.numCertificado = new.numCertificado And p.numCertificado = new.numCertificado 
+        And new.idInscripcion = i.idInscripcion And i.idInscripcion = es.idInscripcion 
+        And es.idCompetencia = comp.idCompetencia And comp.idCategoria = c.idCategoria
+        And (Exists (Select 1 From CategoriaPeso cP Where c.idCategoria = cP.idCategoria And 
+                (cP.minimo > e.peso Or cP.maximo < e.peso))
+        Or Exists (Select 1 From CategoriaEdad cP Where c.idCategoria = cP.idCategoria And 
+                (cP.minima > (2017 - p.fechaDeNacimiento) Or cP.maxima < (2017 - p.fechaDeNacimiento)))
+        Or Exists (Select 1 From CategoriaDan cP Where c.idCategoria = cP.idCategoria And 
+                cP.dan != e.graduacion));
+    END;
