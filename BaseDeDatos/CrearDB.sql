@@ -37,7 +37,7 @@ Foreign Key (idEscuela) References Escuela(idEscuela)
 create table Participante (
 numCertificado int not null,
 DNI int,
-fechaDeNacimiento varchar(30),
+fechaDeNacimiento int,
 Primary Key (numCertificado),
 Foreign Key (numCertificado) References Estudiante(numCertificado)
 );
