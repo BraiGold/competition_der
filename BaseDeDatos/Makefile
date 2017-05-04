@@ -1,20 +1,15 @@
-all:
-	make BD
+all: clean | poblar
 
 clean:
 	rm -f DB.db
-
-poblar:
+poblar: triggers
 	python Poblar.py
 
-generar:
+
+triggers: generar
+	sqlite3 --column --header DB.db < Triggers.sql
+# Mientras que no arreglemos Poblar.py, comentar esta linea ^.
+
+generar: CrearDB.sql
 	cat CrearDB.sql | sqlite3 --column --header DB.db
 
-noBorrar:
-	make generar && make triggers && make poblar
-
-triggers:
-	sqlite3 --column --header DB.db < Triggers.sql
-
-BD:
-	make clean && make noBorrar
