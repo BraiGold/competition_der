@@ -96,3 +96,33 @@ CREATE TRIGGER cumpleConLaCategoria AFTER INSERT ON esIntegranteDe
         Or Exists (Select 1 From CategoriaDan cP Where c.idCategoria = cP.idCategoria And 
                 cP.dan != e.graduacion));
     END;
+
+CREATE TRIGGER unSoloRingPorArbitro AFTER INSERT ON esArbitradaPor
+    BEGIN
+        Select Raise(Rollback, "Un árbitro no puede arbtirar en más de un ring.")
+        From esArbitradaPor eAP 
+        Where eAP.numDePlacaArbitro = new.numDePlacaArbitro And eap.numeroDeRing != new.numeroDeRing;
+    END;
+
+CREATE TRIGGER noPuedeArbitrarMayorGraduacion AFTER INSERT ON esArbitradaPor
+    BEGIN
+        Select Raise(Rollback, "Un árbitro no puede arbitrar una categoría de mayor graduación que la suya.")
+        From Competencia comp, CategoriaDan c, Arbitro a
+        Where new.idCompetencia = comp.idCompetencia And a.numDePlaca = new.numDePlacaArbitro 
+        And comp.idCategoria = c.idCategoria And a.graduacion <= c.dan;
+    END;
+
+CREATE TRIGGER sinModalidadesYCategoriasRepetidas AFTER INSERT ON Competencia
+    BEGIN
+        Select Raise(Rollback, "No puede haber dos competencias de igual modalidad y con categorías iguales .")
+        From Competencia comp, Categoria cNew, Categoria cOtra
+        Where new.idCompetencia != comp.idCompetencia And new.tipo = comp.tipo 
+        And new.idCategoria = cNew.idCategoria And comp.idCategoria = cOtra.idCategoria 
+        And cNew.genero = cOtra.genero
+        And Not Exists (Select 1 From CategoriaPeso cPN, CategoriaPeso cPO Where cNew.idCategoria = cPN.idCategoria 
+            And cOtra.idCategoria = cPO.idCategoria And cPN.minimo = cPO.minimo And cPN.maximo = cPO.maximo)
+        And Not Exists (Select 1 From CategoriaEdad cEN, CategoriaEdad cEO Where cNew.idCategoria = cEN.idCategoria 
+            And cOtra.idCategoria = cEO.idCategoria And cEN.minima = cEO.minima And cEN.maxima = cEO.maxima)
+        And Not Exists (Select 1 From CategoriaDan cDN, CategoriaDan cDO Where cNew.idCategoria = cDN.idCategoria 
+            And cOtra.idCategoria = cDO.idCategoria And cDN.dan = cDO.dan);
+    END;
