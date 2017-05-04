@@ -15,7 +15,6 @@ noBorrar:
 
 triggers:
 	sqlite3 --column --header DB.db < Triggers.sql
-	sqlite3 --column --header DB.db < TriggersPrima.sql
 
 BD:
 	make clean && make noBorrar
