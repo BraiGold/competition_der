@@ -3,24 +3,91 @@
 
 \emph{El listado de inscriptos en cada categoría par el armado de llaves.}
 \begin{lstlisting}[language=SQL]
-%% ACA LA QUERY
+SELECT c.idCategoria , eid.numCertificado 
+FROM ( (
+	esIntegranteDe eid INNER JOIN Inscripcion i 
+	ON eid.idInscripcion = i.idInscripcion) 
+	
+	INNER JOIN  esEn ee 
+	ON ee.idInscripcion = i.idInscripcion) 
+
+	INNER JOIN Competencia c 
+	ON c.idCompetencia = ee.idCompetencia
+
+ORDER BY eid.numCertificado;
 \end{lstlisting}
 
 \emph{El país que obtuvo mayor cantidad de medallas de oro, plata y bronce.}
 \begin{lstlisting}[language=SQL]
-%% ACA LA QUERY
+SELECT	mas.idPais , COUNT(*) amount 
+FROM ( ( ( ( (esEn ee INNER JOIN Inscripcion i ON ee.idInscripcion = i.idInscripcion) INNER JOIN  esIntegranteDe eid ON eid.idInscripcion = i.idInscripcion ) INNER JOIN Estudiante e ON e.numCertificado = eid.numCertificado) INNER JOIN Escuela esc ON e.idEscuela = esc.idEscuela) INNER JOIN Mestro mas ON esc.idMaestro = mas.placaInstructor) 
+WHERE ee.puesto = 1 OR ee.puesto == 2 OR ee.puesto = 3 
+GROUP BY mas.idPais 
+ORDER BY amount ASC 
+LIMIT 1;
 \end{lstlisting}
 
 
 \emph{Sabiendo que las medallas de oro suman 3 puntos, las de plata 2 y las de bronce 1 punto, se quiere realizar un ranking de puntaje por país y otro por escuela.}
 \begin{lstlisting}[language=SQL]
-%% ACA LA QUERY
+SELECT idPais , SUM(puntaje) puntajeTotal
+FROM
+		(SELECT	mas.idPais , 3*COUNT(*) puntaje 
+		FROM ( ( ( ( (esEn ee INNER JOIN Inscripcion i ON ee.idInscripcion = i.idInscripcion) INNER JOIN  esIntegranteDe eid ON eid.idInscripcion = i.idInscripcion ) INNER JOIN Estudiante e ON e.numCertificado = eid.numCertificado) INNER JOIN Escuela esc ON e.idEscuela = esc.idEscuela) INNER JOIN Mestro mas ON esc.idMaestro = mas.placaInstructor) 
+		WHERE ee.puesto = 1
+		GROUP BY mas.idPais)
+
+	UNION
+
+		(SELECT	mas.idPais , 2*COUNT(*) puntaje 
+		FROM ( ( ( ( (esEn ee INNER JOIN Inscripcion i ON ee.idInscripcion = i.idInscripcion) INNER JOIN  esIntegranteDe eid ON eid.idInscripcion = i.idInscripcion ) INNER JOIN Estudiante e ON e.numCertificado = eid.numCertificado) INNER JOIN Escuela esc ON e.idEscuela = esc.idEscuela) INNER JOIN Mestro mas ON esc.idMaestro = mas.placaInstructor) 
+		WHERE ee.puesto = 2
+		GROUP BY mas.idPais)
+
+	UNION
+
+		(SELECT	mas.idPais , COUNT(*) puntaje 
+		FROM ( ( ( ( (esEn ee INNER JOIN Inscripcion i ON ee.idInscripcion = i.idInscripcion) INNER JOIN  esIntegranteDe eid ON eid.idInscripcion = i.idInscripcion ) INNER JOIN Estudiante e ON e.numCertificado = eid.numCertificado) INNER JOIN Escuela esc ON e.idEscuela = esc.idEscuela) INNER JOIN Mestro mas ON esc.idMaestro = mas.placaInstructor) 
+		WHERE ee.puesto = 3
+		GROUP BY mas.idPais)
+
+GROUP BY idPais
+ORDER BY puntajeTotal ASC;
+
+
+
+
+SELECT idEscuela  , SUM(puntaje) puntajeTotal
+FROM
+		(SELECT	mas.idEscuela , 3*COUNT(*) puntaje 
+		FROM ( ( ( ( (esEn ee INNER JOIN Inscripcion i ON ee.idInscripcion = i.idInscripcion) INNER JOIN  esIntegranteDe eid ON eid.idInscripcion = i.idInscripcion ) INNER JOIN Estudiante e ON e.numCertificado = eid.numCertificado) INNER JOIN Escuela esc ON e.idEscuela = esc.idEscuela) INNER JOIN Mestro mas ON esc.idMaestro = mas.placaInstructor) 
+		WHERE ee.puesto = 1
+		GROUP BY mas.idEscuela)
+
+	UNION
+
+		(SELECT	mas.idEscuela , 2*COUNT(*) puntaje 
+		FROM ( ( ( ( (esEn ee INNER JOIN Inscripcion i ON ee.idInscripcion = i.idInscripcion) INNER JOIN  esIntegranteDe eid ON eid.idInscripcion = i.idInscripcion ) INNER JOIN Estudiante e ON e.numCertificado = eid.numCertificado) INNER JOIN Escuela esc ON e.idEscuela = esc.idEscuela) INNER JOIN Mestro mas ON esc.idMaestro = mas.placaInstructor) 
+		WHERE ee.puesto = 2
+		GROUP BY mas.idEscuela)
+
+	UNION
+
+		(SELECT	mas.idEscuela , COUNT(*) puntaje 
+		FROM ( ( ( ( (esEn ee INNER JOIN Inscripcion i ON ee.idInscripcion = i.idInscripcion) INNER JOIN  esIntegranteDe eid ON eid.idInscripcion = i.idInscripcion ) INNER JOIN Estudiante e ON e.numCertificado = eid.numCertificado) INNER JOIN Escuela esc ON e.idEscuela = esc.idEscuela) INNER JOIN Mestro mas ON esc.idMaestro = mas.placaInstructor) 
+		WHERE ee.puesto = 3
+		GROUP BY mas.idEscuela)
+
+GROUP BY idEscuela
+ORDER BY puntajeTotal ASC;
 \end{lstlisting}
 
 
 \emph{Dado un competidor, la lista de categorías donde haya participado y el resultado obtenido.}
 \begin{lstlisting}[language=SQL]
-%% ACA LA QUERY
+SELECT	comp.idCategoria , ee.puesto
+FROM ( ( esIntegranteDe eid INNER JOIN inscripcion i ON eid.idInscripcion = i.idInscripcion ) INNER JOIN esEn ee ON ee.idInscripcion = i.idInscripcion) INNER JOIN Competencia comp ON ee.idCompetencia = comp.idCompetencia 
+WHERE eid.numCertificado =: @numcert;
 \end{lstlisting}
 
 
