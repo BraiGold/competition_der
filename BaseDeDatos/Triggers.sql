@@ -22,11 +22,61 @@ CREATE TRIGGER unSoloTeam AFTER INSERT ON esIntegranteDe
                 And i.idInscripcion = eid.idInscripcion And i.GrupalOIndividual = "G");
     END;
 
-CREATE TRIGGER noSelfCoach AFTER INSERT ON esIntegranteDe
+--CREATE TRIGGER noSelfCoach AFTER INSERT ON esIntegranteDe
+--    BEGIN
+--        Select Raise(Rollback, "Un participante no puede coachearse a sí mismo.")
+--        Where Exists (Select 1 From Inscripcion i, Estudiante e
+--                Where new.idInscripcion = i.idInscripcion And 
+--                i.idCoach = e.numCertificado
+--            And e.numCertificado = new.numCertificado);
+--    END;
+
+CREATE TRIGGER categoriaCorrectaCombate AFTER INSERT ON Competencia
     BEGIN
-        Select Raise(Rollback, "Un participante no puede coachearse a sí mismo.")
-        Where Exists (Select 1 From Inscripcion i, Estudiante e
-                Where new.idInscripcion = i.idInscripcion And 
-                i.idCoach = e.numCertificado
-            And e.numCertificado = new.numCertificado);
+        Select Raise(Rollback, "Las categorías de una competencia de Combate deben ser: Peso, Edad, Género y Graduación.")
+        From Categoria c
+        Where new.tipo = "C" And
+        (c.idCategoria not in (Select cP.idCategoria From CategoriaPeso cP)
+        Or c.idCategoria not in (Select cP.idCategoria From CategoriaEdad cP)
+        Or c.idCategoria not in (Select cP.idCategoria From CategoriaDan cP));
+    END;
+
+CREATE TRIGGER categoriaCorrectaFormas AFTER INSERT ON Competencia
+    BEGIN
+        Select Raise(Rollback, "Las categorías de una competencia de Formas deben ser: Edad, Género y Graduación.")
+        From Categoria c
+        Where new.tipo = "F" And
+        (c.idCategoria in (Select cP.idCategoria From CategoriaPeso cP)
+        Or c.idCategoria not in (Select cP.idCategoria From CategoriaEdad cP)
+        Or c.idCategoria not in (Select cP.idCategoria From CategoriaDan cP));
+    END;
+
+CREATE TRIGGER categoriaCorrectaSalto AFTER INSERT ON Competencia
+    BEGIN
+        Select Raise(Rollback, "Las categorías de una competencia de Salto deben ser: Edad, Género y Graduación.")
+        From Categoria c
+        Where new.tipo = "S" And
+        (c.idCategoria in (Select cP.idCategoria From CategoriaPeso cP)
+        Or c.idCategoria not in (Select cP.idCategoria From CategoriaEdad cP)
+        Or c.idCategoria not in (Select cP.idCategoria From CategoriaDan cP));
+    END;
+
+CREATE TRIGGER categoriaCorrectaRotura AFTER INSERT ON Competencia
+    BEGIN
+        Select Raise(Rollback, "Las categorías de una competencia de Rotura deben ser: Género y Graduación.")
+        From Categoria c
+        Where new.tipo = "R" And
+        (c.idCategoria in (Select cP.idCategoria From CategoriaPeso cP)
+        Or c.idCategoria in (Select cP.idCategoria From CategoriaEdad cP)
+        Or c.idCategoria not in (Select cP.idCategoria From CategoriaDan cP));
+    END;
+
+CREATE TRIGGER categoriaCorrectaCombatePorEquipos AFTER INSERT ON Competencia
+    BEGIN
+        Select Raise(Rollback, "La categoría de una competencia de Combate por Equipos debe ser por Género.")
+        From Categoria c
+        Where new.tipo = "cE" And
+        (c.idCategoria in (Select cP.idCategoria From CategoriaPeso cP)
+        Or c.idCategoria in (Select cP.idCategoria From CategoriaEdad cP)
+        Or c.idCategoria in (Select cP.idCategoria From CategoriaDan cP));
     END;
