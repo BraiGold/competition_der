@@ -1,6 +1,6 @@
 
 
-Para una escuela, tiene que haber un coach cada 5 competidores.
+\emph{Para una escuela, tiene que haber un coach cada 5 competidores.}
 
 \begin{lstlisting}[language=SQL]
 select (
@@ -13,7 +13,7 @@ select (
     where c.numcertificado = e.numcertificado and e.idescuela = @idEscuela);
 \end{lstlisting}
 
-Si una inscripción es grupal, debe tener 8 participantes, 5 titulares y 3 suplentes.
+\emph{Si una inscripción es grupal, debe tener 8 participantes, 5 titulares y 3 suplentes.}
 
 \begin{lstlisting}[language=SQL]
 select (
@@ -29,7 +29,7 @@ select (
 	      not e.estitular) = 3;
 \end{lstlisting}
 
-Toda competencia tiene mínimo 3 inscriptos.
+\emph{Toda competencia tiene mínimo 3 inscriptos.}
 
 \begin{lstlisting}[language=SQL]
 select (
@@ -38,7 +38,7 @@ select (
   where e.idcompetencia = @idCompetencia) >= 3;
 \end{lstlisting}
 
-Tiene que haber exactamente un primer puesto y exactamente un segundo puesto y exactamente un tercer puesto.
+\emph{Para cada competencia (luego de haberse jugado) tiene que haber exactamente un primer puesto y exactamente un segundo puesto y exactamente un tercer puesto.}
 
 \begin{lstlisting}[language=SQL]
 select (
@@ -53,7 +53,7 @@ select (
   where e.idcompetencia = @idCompetencia and e.puesto = 3) = 1;
 \end{lstlisting}
 
-En cada competencia tiene que haber al menos: un presidente de mesa, un arbitro central, varios jueces y al menos 3 suplentes.
+\emph{En cada competencia tiene que haber al menos un presidente de mesa, un arbitro central, varios jueces y 3 suplentes.}
 
 \begin{lstlisting}[language=SQL]
 select (
@@ -75,7 +75,7 @@ select (
         e.funciondelarbitro = "Suplente") >= 3;
 \end{lstlisting}
 
-El numero de jueces debe coincidir con cantidadDeArbitros de la competencia.
+\emph{El numero de jueces debe ser mayor o igual que el cantidadDeArbitros de la competencia.}
 
 \begin{lstlisting}[language=SQL]
 select (

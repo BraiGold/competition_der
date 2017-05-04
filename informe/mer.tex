@@ -6,23 +6,47 @@ El MER se encuentra en la siguiente página. Si tiene problemas para verlo, por 
 A la hora de hacer el diagrama de entidad--relación hicimos algunas asunciones sobre el problema, sobre todo en aspectos en los que la consigna era vaga. A continuación se encuentran los más importantes.
 
 \begin{enumerate}
-	\item Los alumnos de la escuela y el maestro son del mismo pais que su escuela.
+	\item Los alumnos de la escuela y el maestro son del mismo país que su escuela.
 	\item Los puestos de las competencias solo van a ser 1, 2 y 3.
 	\item Los certificados ITF son únicos.
 	\item En toda competencia debe haber al menos 3 competidores.
-	\item Puede haber categorias solapadas en una misma disciplina.
+	\item Puede haber categorías solapadas en una misma disciplina.
 \end{enumerate}
 
 
 \subsubsection{Restricciones}
 
-Estas son las restricciones 
+Estas son las restricciones
 
 \begin{enumerate}
   \item Para una escuela, tiene que haber un coach cada 5 competidores.
   \item Si una inscripción es grupal, debe tener 8 participantes, 5 titulares y 3 suplentes.
   \item Toda competencia tiene mínimo 3 inscriptos.
-  \item faltan...
+  \item Para cada competencia (luego de haberse jugado) tiene que haber exactamente un primer puesto y exactamente un segundo puesto y exactamente un tercer puesto.
+  \item En cada competencia tiene que haber al menos un presidente de mesa, un arbitro central, varios jueces y 3 suplentes.
+  \item El número de jueces debe ser mayor o igual que el cantidadDeArbitros de la competencia.
+
+
+  \item Si una inscripción es individual debe ser integrada por un participante y coacheada por un coach.
+  \item Cantidad de participantes por inscripción: \begin{enumerate}
+    \item Combate por equipos tiene inscripciones grupales.
+    \item El resto tiene inscripciones individuales. \end{enumerate}
+  \item  Si una inscripción es individual, entonces el participante es titular.
+  \item Todos los participantes y coaches de una inscripción deben ser de la misma escuela.
+  \item Un participante no puede estar en 2 equipos.
+  \item La disciplina de una competencia debe corresponderse a un tipo de categoría particular: \begin{enumerate}
+    \item combate: peso, edad, sexo, dan.
+    \item formas: sexo edad, dan.
+    \item salto: sexo, edad, dan.
+    \item rotura: sexo, dan
+    \item combate por equipos: sexo \end{enumerate}
+  \item Si un participante esta en una inscripción en una categoría, debe tener el peso correspondiente.
+  \item Si un participante esta en una inscripción en una categoría, debe tener el genero correspondiente.
+  \item Si un participante esta en una inscripción en una categoría, debe tener el dan correspondiente.
+  \item Si un participante esta en una inscripción en una categoría, debe tener la edad correspondiente.
+  \item Si un arbitro arbitra mas de una competencia, todas tienen que ser en el mismo ring.
+  \item El mínimo dan de los jueces de una competencia debe ser mayor al máximo de los competidores.
+  \item No puede haber competencias del mismo tipo con iguales categorías.
 \end{enumerate}
 
 \subsubsection{Diagrama}
