@@ -1,4 +1,88 @@
 
 
+Para una escuela, tiene que haber un coach cada 5 competidores.
 
+\begin{lstlisting}[language=SQL]
+select (
+    select count(p.numcertificado)
+    from participante p, estudiante e
+    where p.numcertificado = e.numcertificado and e.idescuela = @idEscuela)
+  <= 5* (
+    select count(c.numcertificado)
+    from coach c, estudiante e
+    where c.numcertificado = e.numcertificado and e.idescuela = @idEscuela);
+\end{lstlisting}
 
+Si una inscripción es grupal, debe tener 8 participantes, 5 titulares y 3 suplentes.
+
+\begin{lstlisting}[language=SQL]
+select (
+  select count(p.numcertificado)
+  from participante p, esintegrantede e
+  where e.numcertificado = p.numcertificado and
+              e.idinscripcion = @idInscripcionGrupal and
+	      e.estitular) = 5 and (
+  select count(p.numcertificado)
+  from participante p, esintegrantede e
+  where e.numcertificado = p.numcertificado and
+              e.idinscripcion = @idInscripcionGrupal and
+	      not e.estitular) = 3;
+\end{lstlisting}
+
+Toda competencia tiene mínimo 3 inscriptos.
+
+\begin{lstlisting}[language=SQL]
+select (
+  select count(e.idinscripcion)
+  from esen e
+  where e.idcompetencia = @idCompetencia) >= 3;
+\end{lstlisting}
+
+Tiene que haber exactamente un primer puesto y exactamente un segundo puesto y exactamente un tercer puesto.
+
+\begin{lstlisting}[language=SQL]
+select (
+  select count(e.idinscripcion)
+  from esen e
+  where e.idcompetencia = @idCompetencia and e.puesto = 1) = 1 and (
+  select count(e.idinscripcion)
+  from esen e
+  where e.idcompetencia = @idCompetencia and e.puesto = 2) = 1 and (
+  select count(e.idinscripcion)
+  from esen e
+  where e.idcompetencia = @idCompetencia and e.puesto = 3) = 1;
+\end{lstlisting}
+
+En cada competencia tiene que haber al menos: un presidente de mesa, un arbitro central, varios jueces y al menos 3 suplentes.
+
+\begin{lstlisting}[language=SQL]
+select (
+  select count(e.numdeplacaarbitro)
+  from esarbitradapor e
+  where e.idcompetencia = @idCompetencia and
+        e.funciondelarbitro = "PresidenteDeMesa") >= 1 and (
+  select count(e.numdeplacaarbitro)
+  from esarbitradapor e
+  where e.idcompetencia = @idCompetencia and
+        e.funciondelarbitro = "Central") >= 1 and (
+  select count(e.numdeplacaarbitro)
+  from esarbitradapor e
+  where e.idcompetencia = @idCompetencia and
+        e.funciondelarbitro = "Juez") >= 2 and (
+  select count(e.numdeplacaarbitro)
+  from esarbitradapor e
+  where e.idcompetencia = @idCompetencia and
+        e.funciondelarbitro = "Suplente") >= 3;
+\end{lstlisting}
+
+El numero de jueces debe coincidir con cantidadDeArbitros de la competencia.
+
+\begin{lstlisting}[language=SQL]
+select (
+  select count(e.numdeplacaarbitro)
+  from esarbitradapor e
+  where e.idcompetencia = @idCompetencia) = (
+  select c.cantidaddearbitros
+  from competencia c
+  where c.idcompetencia = @idCompetencia);
+\end{lstlisting}
