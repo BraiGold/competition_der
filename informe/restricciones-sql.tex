@@ -1,4 +1,10 @@
-\ldots
+\par Las restricciones previamente mencionadas fueron implementadas ya sea como queries o como triggers.
+Preferimos la implementación como triggers, pero ésta no siempre es posible.
+Por ejemplo, considerar los puestos en las competencias: se debe poder acceder a los inscriptos previamente a la realización de la competencia, por lo que no se puede validar que los puestos no violen las restricciones al tiempo de inserción; éstas varían a lo largo de una competencia.
+
+\par Otro caso en el que empleamos queries en vez de triggers es para restricciones que no pueden ser validadas al insertar valores uno por uno (por ejemplo que la cantidad de integrantes de una inscripción grupal sea 8, 5 titulares y 3 suplentes).
+Si bien en un sistema en producción éstas deberían realizarse mediante una sola transacción atómica (que podría ser validada mediante triggers), esto escapa al TP actual, por lo que las hacemos una por una y por ende debemos validarlas mediante queries en vez de triggers.
+
 
 \subsubsection{Consultas}
 \emph{Para una escuela, tiene que haber un coach cada 5 competidores.}
