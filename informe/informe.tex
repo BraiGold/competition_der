@@ -1,5 +1,5 @@
 \documentclass[hidelinks,a4paper,10pt, nofootinbib]{article}
-\usepackage{geometry}
+\usepackage[left=2cm,right=2cm,top=4cm,bottom=3.5cm]{geometry}
 \usepackage[spanish, es-tabla]{babel} %es-tabla es para que ponga Tabla en vez de Cuadro en el caption
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -54,7 +54,7 @@
 \thispagestyle{fancy}
 \addtolength{\headheight}{1pt}
 \lhead{Bases de Datos}
-\rhead{$1º$ cuatrimestre de 2016}
+\rhead{$1º$ cuatrimestre de 2017}
 \cfoot{\thepage\ / \pageref{LastPage}}
 \renewcommand{\footrulewidth}{0.4pt}
 \renewcommand{\labelitemi}{$\bullet$}
@@ -89,6 +89,8 @@
 \newpage
 
 \section{Consultas y Stored Procedures}
+Nota: cuando indicamos una variable con un arroba antes de su nombre (@variable), significa que es el parámetro de la consulta, y debe ser intercambiado para hacer todas las posibles consultas.
+
 \subsection{Funcionalidades a implementar}
 \input{funcionalidades.tex}
 \subsection{Restricciones}
