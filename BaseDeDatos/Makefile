@@ -6,10 +6,10 @@ clean:
 poblar: triggers
 	python Poblar.py
 
-triggers: generar
+triggers: DB.db Triggers.sql
 	sqlite3 --column --header DB.db < Triggers.sql
 # Mientras que no arreglemos Poblar.py, comentar esta linea ^.
 
-generar: CrearDB.sql
+DB.db: CrearDB.sql
 	cat CrearDB.sql | sqlite3 --column --header DB.db
 
