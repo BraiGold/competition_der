@@ -175,8 +175,8 @@ idCompetencia int not null,
 numDePlacaArbitro int not null,
 numeroDeRing int not null,
 funcionDelArbitro varchar(30),
-Primary Key (idCategoria, numDePlacaArbitro),
-Foreign Key (idCategoria) References Categoria(idCategoria),
+Primary Key (idCompetencia, numDePlacaArbitro),
+Foreign Key (idCompetencia) References Competencia(idCompetencia),
 Foreign Key (numDePlacaArbitro) References Arbitro(numDePlacaArbitro),
 Foreign Key (numeroDeRing) References Ring(numeroDeRing)
 );
