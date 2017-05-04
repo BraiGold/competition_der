@@ -11,7 +11,10 @@ generar:
 	cat CrearDB.sql | sqlite3 --column --header DB.db
 
 noBorrar:
-	make generar && poblar
+	make generar && make triggers && make poblar
+
+triggers:
+	sqlite3 --column --header DB.db < Triggers.sql
 
 BD:
-	make clean && make generar && make poblar
+	make clean && make noBorrar
