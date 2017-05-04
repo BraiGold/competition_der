@@ -2,7 +2,7 @@ all:
 	make BD
 
 clean:
-	rm -f DB.db 
+	rm -f DB.db
 
 poblar:
 	python Poblar.py
@@ -15,6 +15,7 @@ noBorrar:
 
 triggers:
 	sqlite3 --column --header DB.db < Triggers.sql
+	sqlite3 --column --header DB.db < TriggersPrima.sql
 
 BD:
 	make clean && make noBorrar

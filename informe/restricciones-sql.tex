@@ -86,3 +86,76 @@ select (
   from competencia c
   where c.idcompetencia = @idCompetencia);
 \end{lstlisting}
+
+\emph{Si una inscripción es individual debe ser integrada por un participante.}
+
+\begin{lstlisting}[language=SQL]
+select 1
+from inscripcionindividual i, esintegrantede e
+where i.idinscripcion = e.idinscripcion
+group by e.idinscripcion
+having count(e.numcertificado) != 1;
+\end{lstlisting}
+
+\emph{Cantidad de participantes por inscripción: Combate por equipos tiene inscripciones grupales.}
+
+\begin{lstlisting}[language=SQL]
+select 1
+from competenciacombateporequipos c, inscripcion i, esen e
+where c.idcompetencia =e.idcompetencia and
+            i.idinscripcion = e.idinscripcion and
+	    (select count(e2.numcertificado)
+	     from esintegrantede e2
+	     where i.idinscripcion = e2.idinscripcion) != 8;
+\end{lstlisting}
+
+\emph{Cantidad de participantes por inscripción: El resto tiene inscripciones individuales.}
+
+\begin{lstlisting}[language=SQL]
+select 1
+from competenciacombate c, inscripcion i, esen e
+where c.idcompetencia =e.idcompetencia and
+            i.idinscripcion = e.idinscripcion and
+	    (select count(e2.numcertificado)
+	     from esintegrantede e2
+	     where i.idinscripcion = e2.idinscripcion) != 1;
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL]
+select 1
+from competenciaformas c, inscripcion i, esen e
+where c.idcompetencia =e.idcompetencia and
+            i.idinscripcion = e.idinscripcion and
+	    (select count(e2.numcertificado)
+	     from esintegrantede e2
+	     where i.idinscripcion = e2.idinscripcion) != 1;
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL]
+select 1
+from competenciarotura c, inscripcion i, esen e
+where c.idcompetencia =e.idcompetencia and
+            i.idinscripcion = e.idinscripcion and
+	    (select count(e2.numcertificado)
+	     from esintegrantede e2
+	     where i.idinscripcion = e2.idinscripcion) != 1;
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL]
+select 1
+from competenciasalto c, inscripcion i, esen e
+where c.idcompetencia =e.idcompetencia and
+            i.idinscripcion = e.idinscripcion and
+	    (select count(e2.numcertificado)
+	     from esintegrantede e2
+	     where i.idinscripcion = e2.idinscripcion) != 1;
+\end{lstlisting}
+
+\emph{Si una inscripción es individual, entonces el participante es titular.}
+
+\begin{lstlisting}[language=SQL]
+select 1
+from inscripcionindividual i, esintegrantede e
+where i.idinscripcion = e.idinscripcion and not e.estitular;
+\end{lstlisting}
+
