@@ -43,7 +43,7 @@ digraph MER {
   Categoria [shape=box];
 
   Pais [shape=box];
-  seEncuentraEn [shape=diamond];
+  originaDe [shape=diamond];
   esOriginarioDe [shape=diamond];
 
   Ring [shape=box];
@@ -55,8 +55,8 @@ digraph MER {
   estudiaEn -> Escuela [label=1];
   Escuela -> esDirigidaPor [label=1];
   esDirigidaPor -> Maestro [label=1];
-  Escuela -> seEncuentraEn [label=N];
-  seEncuentraEn -> Pais [label=1];
+  Maestro -> originaDe [label=N];
+  originaDe -> Pais [label=1];
 
   Estudiante -> oEstudiante;
   oEstudiante -> Participante;
@@ -161,11 +161,18 @@ digraph MER {
     aMaestroNombre [shape=ellipse, label=nombre];
     aMaestroApellido [shape=ellipse, label=apellido];
     aMaestroGraduacion [shape=ellipse, label=graduacion];
-    aMaestroNumeroPlacaDeInstructor [shape=ellipse, label=<<u>placaDeInstructor</u>>];
+    aMaestroNumeroPlacaInstructor [shape=ellipse, label=<<u>placaInstructor</u>>];
     Maestro -> aMaestroNombre;
     Maestro -> aMaestroApellido;
     Maestro -> aMaestroGraduacion;
-    Maestro -> aMaestroNumeroPlacaDeInstructor;
+    Maestro -> aMaestroNumeroPlacaInstructor;
+  }
+
+  subgraph clusterAtributosEscuela {
+    margin=0; style=invis;
+    node [fontsize=10,fixedsize=false,shape=ellipse,width=0,height=0,margin=0];
+    aIdEscuela [shape=ellipse, label=<<u>idEscuela</u>>];
+    Escuela -> aIdEscuela;
   }
 
   subgraph clusterAtributosEstudiante {
@@ -174,13 +181,13 @@ digraph MER {
     aEstudianteNombre [shape=ellipse, label=nombre];
     aEstudianteApellido [shape=ellipse, label=apellido];
     aEstudianteGraduacion [shape=ellipse, label=graduacion];
-    aEstudianteCertificadoITF [shape=ellipse, label=<<u>numeroCertificadoITF</u>>];
+    aEstudianteCertificado [shape=ellipse, label=<<u>numeroCertificado</u>>];
     aEstudianteFoto [shape=ellipse, label="foto?"];
     aEstudiantePeso [shape=ellipse, label=peso];
     Estudiante -> aEstudianteNombre;
     Estudiante -> aEstudianteApellido;
     Estudiante -> aEstudianteGraduacion;
-    Estudiante -> aEstudianteCertificadoITF;
+    Estudiante -> aEstudianteCertificado;
     Estudiante -> aEstudianteFoto;
     Estudiante -> aEstudiantePeso;
   }

@@ -25,7 +25,7 @@ create table Estudiante (
 numCertificado int not null,
 nombre varchar(30),
 apellido varchar(30),
-genero bool,
+genero char(1),
 graduacion int,
 peso int,
 foto binary(9),
@@ -60,7 +60,7 @@ Foreign Key (idInscripcion) References Inscripcion(idInscripcion)
 create table Inscripcion (
 idInscripcion int not null,
 idCoach int not null,
-grupalOIndividual bool,
+grupalOIndividual char(1),
 Primary Key (idInscripcion),
 Foreign Key (idCoach) References Coach(numCertificado)
 );
@@ -128,7 +128,7 @@ Foreign Key (idCompetencia) References Competencia(idCompetencia)
 
 create table Categoria (
 idCategoria int not null,
-genero bool,
+genero char(1),
 Primary Key (idCategoria)
 );
 
