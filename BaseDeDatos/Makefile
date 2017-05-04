@@ -2,9 +2,9 @@ all: clean | poblar
 
 clean:
 	rm -f DB.db
+
 poblar: triggers
 	python Poblar.py
-
 
 triggers: generar
 	sqlite3 --column --header DB.db < Triggers.sql
