@@ -158,7 +158,7 @@ def generarInscripciones(estudiantes, participantes, coaches, competencias,cat, 
                     if salir: break
                 if salir: continue
                 id_ = (i + j * len(estudiantes)) * len(competencias) + competencia_i
-                inscripciones.append((id_, i, 1))
+                inscripciones.append((id_, i, "I"))
                 individual.append((id_, ))
                 esintegrantede.append((estudiantes[i][0], id_, True))
                 if (x[0], id_) not in puestos_competencias:
@@ -170,7 +170,7 @@ def generarInscripciones(estudiantes, participantes, coaches, competencias,cat, 
                 ultimo_id = id_
                 competencia_i += 1
 
-    inscripciones.append((ultimo_id + 1, 1, 2))
+    inscripciones.append((ultimo_id + 1, 1, "G"))
     grupal.append((ultimo_id + 1, ))
     esintegrantede.append((3, ultimo_id + 1, True))
     esintegrantede.append((8, ultimo_id + 1, True))

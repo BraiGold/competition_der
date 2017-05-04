@@ -1,7 +1,7 @@
 all: mer
 
 mer: mer.dot
-	dot -Tpng mer.dot -o mer.png
+	dot -Tpdf mer.dot -o mer.pdf
 
 clean:
 	rm mer.png

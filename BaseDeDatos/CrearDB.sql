@@ -171,7 +171,7 @@ Foreign Key (idPais) References Pais(idPais)
 );
 
 create table esArbitradaPor (
-idCategoria int not null,
+idCompetencia int not null,
 numDePlacaArbitro int not null,
 numeroDeRing int not null,
 funcionDelArbitro varchar(30),

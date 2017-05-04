@@ -1,9 +1,12 @@
 all: informe
 
-informe: informe.tex
+informe: mer informe.tex
 	pdflatex -draftmode -interaction nonstopmode informe.tex
 	pdflatex -draftmode -interaction nonstopmode informe.tex
 	pdflatex -interaction nonstopmode informe.tex
+
+mer:
+	make -C ../mer
 
 view:
 	zathura informe.pdf
