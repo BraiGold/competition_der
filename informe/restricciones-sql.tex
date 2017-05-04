@@ -201,3 +201,208 @@ CREATE TRIGGER individualEsTitular AFTER INSERT ON esIntegranteDe
     END;
 \end{lstlisting}
 
+\emph{En una inscripción el coach no puede ser ninguno de los participantes.}
+
+\begin{lstlisting}[language=SQL]
+
+CREATE TRIGGER noSelfCoach AFTER INSERT ON esIntegranteDe
+    BEGIN
+        Select Raise(Rollback, "Un participante no puede coachearse a sí mismo.")
+        Where Exists (Select 1 From Inscripcion i, Estudiante e
+                Where new.idInscripcion = i.idInscripcion And 
+                i.idCoach = e.numCertificado
+            And e.numCertificado = new.numCertificado);
+    END;
+\end{lstlisting}
+  
+\emph{Todos los participantes y coaches de una inscripción deben ser de la misma escuela.}
+
+\begin{lstlisting}[language=SQL]
+CREATE TRIGGER mismaEscuela AFTER INSERT ON esIntegranteDe
+    BEGIN
+        Select Raise(Rollback, "Tanto los participantes como el coach deben ser de la misma escuela.")
+        Where Exists (Select 1 From esIntegranteDe eid, Estudiante e, (Select es.idEscuela id From Estudiante es
+                Where es.numCertificado = new.numCertificado) esc
+                Where new.idInscripcion = eid.idInscripcion And e.numCertificado = eid.numCertificado
+            And e.idEscuela != esc.id)
+        Or Exists (Select 1 From Inscripcion i, Estudiante e, (Select es.idEscuela id From Estudiante es
+                Where es.numCertificado = new.numCertificado) esc
+                Where new.idInscripcion = i.idInscripcion And 
+                i.idCoach = e.numCertificado
+            And e.idEscuela != esc.id);
+    END;
+\end{lstlisting}
+
+\emph{Un participante no puede estar en 2 equipos.}
+
+\begin{lstlisting}[language=SQL]
+CREATE TRIGGER unSoloTeam AFTER INSERT ON esIntegranteDe
+    BEGIN
+        Select Raise(Rollback, "Un participante no puede estar en más de un equipo.")
+        Where Exists (Select 1 From Inscripcion i Where i.idInscripcion = new.idInscripcion And 
+            i.GrupalOIndividual = "G") And 
+        Exists (Select 1 From esIntegranteDe eid, Inscripcion i 
+                Where eid.numCertificado = new.numCertificado And new.idInscripcion != eid.idInscripcion
+                And i.idInscripcion = eid.idInscripcion And i.GrupalOIndividual = "G");
+    END;
+\end{lstlisting}
+  
+\emph{
+  La disciplina de una competencia debe corresponderse a un tipo de categoría particular: \begin{enumerate}
+    \item combate: peso, edad, sexo, dan.
+}
+
+\begin{lstlisting}[language=SQL]
+CREATE TRIGGER categoriaCorrectaCombate AFTER INSERT ON Competencia
+    BEGIN
+        Select Raise(Rollback, "Las categorías de una competencia de Combate deben ser: Peso, Edad, Género y Graduación.")
+        From Categoria c
+        Where new.tipo = "C" And
+        (c.idCategoria not in (Select cP.idCategoria From CategoriaPeso cP)
+        Or c.idCategoria not in (Select cP.idCategoria From CategoriaEdad cP)
+        Or c.idCategoria not in (Select cP.idCategoria From CategoriaDan cP));
+    END;
+\end{lstlisting}
+  
+\emph{
+  La disciplina de una competencia debe corresponderse a un tipo de categoría particular: \begin{enumerate}
+    \item formas: sexo edad, dan.
+}
+
+\begin{lstlisting}[language=SQL]
+CREATE TRIGGER categoriaCorrectaFormas AFTER INSERT ON Competencia
+    BEGIN
+        Select Raise(Rollback, "Las categorías de una competencia de Formas deben ser: Edad, Género y Graduación.")
+        From Categoria c
+        Where new.tipo = "F" And
+        (c.idCategoria in (Select cP.idCategoria From CategoriaPeso cP)
+        Or c.idCategoria not in (Select cP.idCategoria From CategoriaEdad cP)
+        Or c.idCategoria not in (Select cP.idCategoria From CategoriaDan cP));
+    END;
+\end{lstlisting}
+\emph{
+  La disciplina de una competencia debe corresponderse a un tipo de categoría particular: \begin{enumerate}
+    \item salto: sexo, edad, dan.
+}
+
+\begin{lstlisting}[language=SQL]
+CREATE TRIGGER categoriaCorrectaSalto AFTER INSERT ON Competencia
+    BEGIN
+        Select Raise(Rollback, "Las categorías de una competencia de Salto deben ser: Edad, Género y Graduación.")
+        From Categoria c
+        Where new.tipo = "S" And
+        (c.idCategoria in (Select cP.idCategoria From CategoriaPeso cP)
+        Or c.idCategoria not in (Select cP.idCategoria From CategoriaEdad cP)
+        Or c.idCategoria not in (Select cP.idCategoria From CategoriaDan cP));
+    END;
+
+\end{lstlisting}
+\emph{
+  La disciplina de una competencia debe corresponderse a un tipo de categoría particular: \begin{enumerate}
+    \item rotura: sexo, dan.
+}
+
+\begin{lstlisting}[language=SQL]
+CREATE TRIGGER categoriaCorrectaRotura AFTER INSERT ON Competencia
+    BEGIN
+        Select Raise(Rollback, "Las categorías de una competencia de Rotura deben ser: Género y Graduación.")
+        From Categoria c
+        Where new.tipo = "R" And
+        (c.idCategoria in (Select cP.idCategoria From CategoriaPeso cP)
+        Or c.idCategoria in (Select cP.idCategoria From CategoriaEdad cP)
+        Or c.idCategoria not in (Select cP.idCategoria From CategoriaDan cP));
+    END;
+
+\end{lstlisting}
+\emph{
+  La disciplina de una competencia debe corresponderse a un tipo de categoría particular: \begin{enumerate}
+    \item combate por equipos: sexo. \end{enumerate}
+}
+
+\begin{lstlisting}[language=SQL]
+CREATE TRIGGER categoriaCorrectaCombatePorEquipos AFTER INSERT ON Competencia
+    BEGIN
+        Select Raise(Rollback, "La categoría de una competencia de Combate por Equipos debe ser por Género.")
+        From Categoria c
+        Where new.tipo = "cE" And
+        (c.idCategoria in (Select cP.idCategoria From CategoriaPeso cP)
+        Or c.idCategoria in (Select cP.idCategoria From CategoriaEdad cP)
+        Or c.idCategoria in (Select cP.idCategoria From CategoriaDan cP));
+    END;
+
+\end{lstlisting}
+\end{enumerate}
+
+\emph{
+   Si un participante esta en una inscripción en una categoría, debe tener el peso correspondiente.
+   Si un participante esta en una inscripción en una categoría, debe tener el genero correspondiente.
+   Si un participante esta en una inscripción en una categoría, debe tener el dan correspondiente.
+   Si un participante esta en una inscripción en una categoría, debe tener la edad correspondiente.
+}
+
+\begin{lstlisting}[language=SQL]
+CREATE TRIGGER cumpleConLaCategoria AFTER INSERT ON esIntegranteDe
+    BEGIN
+        Select Raise(Rollback, "El participante no cumple con las categorías de la competencia.")
+        From Estudiante e, Participante p, Inscripcion i, esEn es, Competencia comp, Categoria c
+        Where e.numCertificado = new.numCertificado And p.numCertificado = new.numCertificado 
+        And new.idInscripcion = i.idInscripcion And i.idInscripcion = es.idInscripcion 
+        And es.idCompetencia = comp.idCompetencia And comp.idCategoria = c.idCategoria
+        And (e.genero != c.genero
+        Or Exists (Select 1 From CategoriaPeso cP Where c.idCategoria = cP.idCategoria And 
+                (cP.minimo > e.peso Or cP.maximo < e.peso))
+        Or Exists (Select 1 From CategoriaEdad cP Where c.idCategoria = cP.idCategoria And 
+                (cP.minima > (2017 - p.fechaDeNacimiento) Or cP.maxima < (2017 - p.fechaDeNacimiento)))
+        Or Exists (Select 1 From CategoriaDan cP Where c.idCategoria = cP.idCategoria And 
+                cP.dan != e.graduacion));
+    END;
+
+\end{lstlisting}
+\emph{
+  Si un arbitro arbitra mas de una competencia, todas tienen que ser en el mismo ring.
+}
+
+\begin{lstlisting}[language=SQL]
+CREATE TRIGGER unSoloRingPorArbitro AFTER INSERT ON esArbitradaPor
+    BEGIN
+        Select Raise(Rollback, "Un árbitro no puede arbtirar en más de un ring.")
+        From esArbitradaPor eAP 
+        Where eAP.numDePlacaArbitro = new.numDePlacaArbitro And eap.numeroDeRing != new.numeroDeRing;
+    END;
+
+\end{lstlisting}
+\emph{
+  Un árbitro no puede arbitrar una categoría de mayor graduación que la suya."
+}
+
+\begin{lstlisting}[language=SQL]
+CREATE TRIGGER noPuedeArbitrarMayorGraduacion AFTER INSERT ON esArbitradaPor
+    BEGIN
+        Select Raise(Rollback, "Un árbitro no puede arbitrar una categoría de mayor graduación que la suya.")
+        From Competencia comp, CategoriaDan c, Arbitro a
+        Where new.idCompetencia = comp.idCompetencia And a.numDePlaca = new.numDePlacaArbitro 
+        And comp.idCategoria = c.idCategoria And a.graduacion <= c.dan;
+    END;
+
+
+\end{lstlisting}
+\emph{
+  No puede haber competencias del mismo tipo con iguales categorías.
+}
+
+\begin{lstlisting}[language=SQL]
+CREATE TRIGGER sinModalidadesYCategoriasRepetidas AFTER INSERT ON Competencia
+    BEGIN
+        Select Raise(Rollback, "No puede haber dos competencias de igual modalidad y con categorías iguales .")
+        From Competencia comp, Categoria cNew, Categoria cOtra
+        Where new.idCompetencia != comp.idCompetencia And new.tipo = comp.tipo 
+        And new.idCategoria = cNew.idCategoria And comp.idCategoria = cOtra.idCategoria 
+        And cNew.genero = cOtra.genero
+        And Not Exists (Select 1 From CategoriaPeso cPN, CategoriaPeso cPO Where cNew.idCategoria = cPN.idCategoria 
+            And cOtra.idCategoria = cPO.idCategoria And cPN.minimo = cPO.minimo And cPN.maximo = cPO.maximo)
+        And Not Exists (Select 1 From CategoriaEdad cEN, CategoriaEdad cEO Where cNew.idCategoria = cEN.idCategoria 
+            And cOtra.idCategoria = cEO.idCategoria And cEN.minima = cEO.minima And cEN.maxima = cEO.maxima)
+        And Not Exists (Select 1 From CategoriaDan cDN, CategoriaDan cDO Where cNew.idCategoria = cDN.idCategoria 
+            And cOtra.idCategoria = cDO.idCategoria And cDN.dan = cDO.dan);
+    END;
+\end{lstlisting}
