@@ -29,7 +29,7 @@ FROM ( ( ( (
         ON e.numCertificado = eid.numCertificado)
     INNER JOIN Escuela esc
         ON e.idEscuela = esc.idEscuela)
-    INNER JOIN Mestro mas
+    INNER JOIN Maestro mas
         ON esc.idMaestro = mas.placaInstructor)
 WHERE ee.puesto = 1 OR ee.puesto == 2 OR ee.puesto = 3
 GROUP BY mas.idPais
@@ -160,7 +160,7 @@ FROM (
     INNER JOIN esEn ee ON ee.idInscripcion = i.idInscripcion)
     INNER JOIN Competencia comp
         ON ee.idCompetencia = comp.idCompetencia
-WHERE eid.numCertificado =: @numcert;
+WHERE eid.numCertificado = @numCertificado;
 \end{lstlisting}
 
 
@@ -220,7 +220,7 @@ where esen.puesto = 1) orosPorEsc
  on Escuela.idEscuela= orosPorEsc.idEsc
  group by Escuela.idEscuela) oros
 
- on oros.idEscOros=platas.idEscPlatas
+ on oros.idEscOros=platas.idEscPlatas;
 \end{lstlisting}
 
 
@@ -230,7 +230,7 @@ select DISTINCT p.nombre pNom , A.nombre, A.apellido,
                 A.numDePlaca placa
 from pais p
 inner join arbitro A on p.idPais = a.idPais
-order by pNom
+order by pNom;
 \end{lstlisting}
 
 
@@ -241,7 +241,7 @@ from esarbitradapor eap
 inner join arbitro A on eap.numDeplacaArbitro = A.numDePlaca
 inner join competencia  C on C.IdCompetencia = eap.idCompetencia
 
-where C.tipo = 'C' and eap.funcionDelArbitro = 'Central'
+where C.tipo = 'C' and eap.funcionDelArbitro = 'Central';
 \end{lstlisting}
 
 
@@ -263,5 +263,5 @@ inner join Inscripciongrupal Ig
     on I.idInscripcion = Ig.idInscripcion
 
 where I.grupaloIndividual ='G'
-order by pNombre
+order by pNombre;
 \end{lstlisting}
