@@ -94,7 +94,6 @@ FROM
 GROUP BY idPais
 ORDER BY puntajeTotal ASC;
 
-
 SELECT idEscuela  , SUM(puntaje) puntajeTotal
 FROM
     (SELECT mas.idEscuela, 3 * COUNT(*) puntaje
@@ -148,6 +147,7 @@ FROM
 
 GROUP BY idEscuela
 ORDER BY puntajeTotal ASC;
+
 \end{lstlisting}
 
 
