@@ -231,12 +231,16 @@ CREATE TRIGGER noSelfCoach AFTER INSERT ON esIntegranteDe
 \begin{lstlisting}[language=SQL]
 CREATE TRIGGER mismaEscuela AFTER INSERT ON esIntegranteDe
     BEGIN
-        Select Raise(Rollback, "Tanto los participantes como el coach deben ser de la misma escuela.")
-        Where Exists (Select 1 From esIntegranteDe eid, Estudiante e, (Select es.idEscuela id From Estudiante es
+        Select Raise(Rollback, "Tanto los participantes como el coach" 
+        "deben ser de la misma escuela.")
+        Where Exists (Select 1 From esIntegranteDe eid, Estudiante e, 
+        (Select es.idEscuela id From Estudiante es
                 Where es.numCertificado = new.numCertificado) esc
-                Where new.idInscripcion = eid.idInscripcion And e.numCertificado = eid.numCertificado
+                Where new.idInscripcion = eid.idInscripcion 
+                And e.numCertificado = eid.numCertificado
             And e.idEscuela != esc.id)
-        Or Exists (Select 1 From Inscripcion i, Estudiante e, (Select es.idEscuela id From Estudiante es
+        Or Exists (Select 1 From Inscripcion i, Estudiante e, 
+        (Select es.idEscuela id From Estudiante es
                 Where es.numCertificado = new.numCertificado) esc
                 Where new.idInscripcion = i.idInscripcion And 
                 i.idCoach = e.numCertificado
@@ -249,12 +253,16 @@ CREATE TRIGGER mismaEscuela AFTER INSERT ON esIntegranteDe
 \begin{lstlisting}[language=SQL]
 CREATE TRIGGER unSoloTeam AFTER INSERT ON esIntegranteDe
     BEGIN
-        Select Raise(Rollback, "Un participante no puede estar en mas de un equipo.")
-        Where Exists (Select 1 From Inscripcion i Where i.idInscripcion = new.idInscripcion And 
+        Select Raise(Rollback, "Un participante no puede"
+        "estar en mas de un equipo.")
+        Where Exists (Select 1 From Inscripcion i 
+        Where i.idInscripcion = new.idInscripcion And 
             i.GrupalOIndividual = "G") And 
         Exists (Select 1 From esIntegranteDe eid, Inscripcion i 
-                Where eid.numCertificado = new.numCertificado And new.idInscripcion != eid.idInscripcion
-                And i.idInscripcion = eid.idInscripcion And i.GrupalOIndividual = "G");
+                Where eid.numCertificado = new.numCertificado 
+                And new.idInscripcion != eid.idInscripcion
+                And i.idInscripcion = eid.idInscripcion 
+                And i.GrupalOIndividual = "G");
     END;
 \end{lstlisting}
   
@@ -265,12 +273,16 @@ CREATE TRIGGER unSoloTeam AFTER INSERT ON esIntegranteDe
 \begin{lstlisting}[language=SQL]
 CREATE TRIGGER categoriaCorrectaCombate AFTER INSERT ON Competencia
     BEGIN
-        Select Raise(Rollback, "Las categorias de una competencia de Combate deben ser: Peso, Edad, Genero y Graduacion.")
+        Select Raise(Rollback, "Las categorias de una competencia de "
+        "Combate deben ser: Peso, Edad, Genero y Graduacion.")
         From Categoria c
         Where new.tipo = "C" And
-        (c.idCategoria not in (Select cP.idCategoria From CategoriaPeso cP)
-        Or c.idCategoria not in (Select cP.idCategoria From CategoriaEdad cP)
-        Or c.idCategoria not in (Select cP.idCategoria From CategoriaDan cP));
+        (c.idCategoria not in (Select cP.idCategoria 
+        From CategoriaPeso cP)
+        Or c.idCategoria not in (Select cP.idCategoria 
+        From CategoriaEdad cP)
+        Or c.idCategoria not in (Select cP.idCategoria 
+        From CategoriaDan cP));
     END;
 \end{lstlisting}
   
@@ -281,12 +293,16 @@ CREATE TRIGGER categoriaCorrectaCombate AFTER INSERT ON Competencia
 \begin{lstlisting}[language=SQL]
 CREATE TRIGGER categoriaCorrectaFormas AFTER INSERT ON Competencia
     BEGIN
-        Select Raise(Rollback, "Las categorias de una competencia de Formas deben ser: Edad, Genero y Graduacion.")
+        Select Raise(Rollback, "Las categorias de una competencia de "
+        "Formas deben ser: Edad, Genero y Graduacion.")
         From Categoria c
         Where new.tipo = "F" And
-        (c.idCategoria in (Select cP.idCategoria From CategoriaPeso cP)
-        Or c.idCategoria not in (Select cP.idCategoria From CategoriaEdad cP)
-        Or c.idCategoria not in (Select cP.idCategoria From CategoriaDan cP));
+        (c.idCategoria in (Select cP.idCategoria 
+        From CategoriaPeso cP)
+        Or c.idCategoria not in (Select cP.idCategoria 
+        From CategoriaEdad cP)
+        Or c.idCategoria not in (Select cP.idCategoria 
+        From CategoriaDan cP));
     END;
 \end{lstlisting}
 \emph{
@@ -296,12 +312,16 @@ CREATE TRIGGER categoriaCorrectaFormas AFTER INSERT ON Competencia
 \begin{lstlisting}[language=SQL]
 CREATE TRIGGER categoriaCorrectaSalto AFTER INSERT ON Competencia
     BEGIN
-        Select Raise(Rollback, "Las categorias de una competencia de Salto deben ser: Edad, Genero y Graduacion.")
+        Select Raise(Rollback, "Las categorias de una competencia de "
+        "Salto deben ser: Edad, Genero y Graduacion.")
         From Categoria c
         Where new.tipo = "S" And
-        (c.idCategoria in (Select cP.idCategoria From CategoriaPeso cP)
-        Or c.idCategoria not in (Select cP.idCategoria From CategoriaEdad cP)
-        Or c.idCategoria not in (Select cP.idCategoria From CategoriaDan cP));
+        (c.idCategoria in (Select cP.idCategoria 
+        From CategoriaPeso cP)
+        Or c.idCategoria not in (Select cP.idCategoria 
+        From CategoriaEdad cP)
+        Or c.idCategoria not in (Select cP.idCategoria 
+        From CategoriaDan cP));
     END;
 
 \end{lstlisting}
@@ -312,12 +332,16 @@ CREATE TRIGGER categoriaCorrectaSalto AFTER INSERT ON Competencia
 \begin{lstlisting}[language=SQL]
 CREATE TRIGGER categoriaCorrectaRotura AFTER INSERT ON Competencia
     BEGIN
-        Select Raise(Rollback, "Las categorias de una competencia de Rotura deben ser: Genero y Graduacion.")
+        Select Raise(Rollback, "Las categorias de una competencia de "
+        "Rotura deben ser: Genero y Graduacion.")
         From Categoria c
         Where new.tipo = "R" And
-        (c.idCategoria in (Select cP.idCategoria From CategoriaPeso cP)
-        Or c.idCategoria in (Select cP.idCategoria From CategoriaEdad cP)
-        Or c.idCategoria not in (Select cP.idCategoria From CategoriaDan cP));
+        (c.idCategoria in (Select cP.idCategoria 
+        From CategoriaPeso cP)
+        Or c.idCategoria in (Select cP.idCategoria 
+        From CategoriaEdad cP)
+        Or c.idCategoria not in (Select cP.idCategoria 
+        From CategoriaDan cP));
     END;
 
 \end{lstlisting}
@@ -325,39 +349,48 @@ CREATE TRIGGER categoriaCorrectaRotura AFTER INSERT ON Competencia
 }
 
 \begin{lstlisting}[language=SQL]
-CREATE TRIGGER categoriaCorrectaCombatePorEquipos AFTER INSERT ON Competencia
+CREATE TRIGGER categoriaCorrectaCombatePorEquipos 
+AFTER INSERT ON Competencia
     BEGIN
-        Select Raise(Rollback, "La categoria de una competencia de Combate por Equipos debe ser por Genero.")
+        Select Raise(Rollback, "La categoria de una competencia de "
+        "Combate por Equipos debe ser por Genero.")
         From Categoria c
         Where new.tipo = "cE" And
-        (c.idCategoria in (Select cP.idCategoria From CategoriaPeso cP)
-        Or c.idCategoria in (Select cP.idCategoria From CategoriaEdad cP)
-        Or c.idCategoria in (Select cP.idCategoria From CategoriaDan cP));
+        (c.idCategoria in (Select cP.idCategoria 
+        From CategoriaPeso cP)
+        Or c.idCategoria in (Select cP.idCategoria 
+        From CategoriaEdad cP)
+        Or c.idCategoria in (Select cP.idCategoria 
+        From CategoriaDan cP));
     END;
 
 \end{lstlisting}
 
-\emph{
-   Si un participante esta en una inscripcion en una categoria, debe tener el peso correspondiente.
-   Si un participante esta en una inscripcion en una categoria, debe tener el genero correspondiente.
-   Si un participante esta en una inscripcion en una categoria, debe tener el dan correspondiente.
-   Si un participante esta en una inscripcion en una categoria, debe tener la edad correspondiente.
-}
+\emph{Un participante debe cumplir con las restricciones de la categoría en la que compite}
 
 \begin{lstlisting}[language=SQL]
 CREATE TRIGGER cumpleConLaCategoria AFTER INSERT ON esIntegranteDe
     BEGIN
-        Select Raise(Rollback, "El participante no cumple con las categorias de la competencia.")
-        From Estudiante e, Participante p, Inscripcion i, esEn es, Competencia comp, Categoria c
-        Where e.numCertificado = new.numCertificado And p.numCertificado = new.numCertificado 
-        And new.idInscripcion = i.idInscripcion And i.idInscripcion = es.idInscripcion 
-        And es.idCompetencia = comp.idCompetencia And comp.idCategoria = c.idCategoria
+        Select Raise(Rollback, "El participante no cumple "
+        "con las categorias de la competencia.")
+        From Estudiante e, Participante p, Inscripcion i, 
+        esEn es, Competencia comp, Categoria c
+        Where e.numCertificado = new.numCertificado 
+        And p.numCertificado = new.numCertificado 
+        And new.idInscripcion = i.idInscripcion 
+        And i.idInscripcion = es.idInscripcion 
+        And es.idCompetencia = comp.idCompetencia 
+        And comp.idCategoria = c.idCategoria
         And (e.genero != c.genero
-        Or Exists (Select 1 From CategoriaPeso cP Where c.idCategoria = cP.idCategoria And 
+        Or Exists (Select 1 From CategoriaPeso cP 
+        Where c.idCategoria = cP.idCategoria And 
                 (cP.minimo > e.peso Or cP.maximo < e.peso))
-        Or Exists (Select 1 From CategoriaEdad cP Where c.idCategoria = cP.idCategoria And 
-                (cP.minima > (2017 - p.fechaDeNacimiento) Or cP.maxima < (2017 - p.fechaDeNacimiento)))
-        Or Exists (Select 1 From CategoriaDan cP Where c.idCategoria = cP.idCategoria And 
+        Or Exists (Select 1 From CategoriaEdad cP 
+        Where c.idCategoria = cP.idCategoria And 
+                (cP.minima > (2017 - p.fechaDeNacimiento) 
+                Or cP.maxima < (2017 - p.fechaDeNacimiento)))
+        Or Exists (Select 1 From CategoriaDan cP 
+        Where c.idCategoria = cP.idCategoria And 
                 cP.dan != e.graduacion));
     END;
 
@@ -369,9 +402,11 @@ CREATE TRIGGER cumpleConLaCategoria AFTER INSERT ON esIntegranteDe
 \begin{lstlisting}[language=SQL]
 CREATE TRIGGER unSoloRingPorArbitro AFTER INSERT ON esArbitradaPor
     BEGIN
-        Select Raise(Rollback, "Un arbitro no puede arbtirar en mas de un ring.")
+        Select Raise(Rollback, "Un arbitro no puede "
+        "arbtirar en mas de un ring.")
         From esArbitradaPor eAP 
-        Where eAP.numDePlacaArbitro = new.numDePlacaArbitro And eap.numeroDeRing != new.numeroDeRing;
+        Where eAP.numDePlacaArbitro = new.numDePlacaArbitro 
+        And eap.numeroDeRing != new.numeroDeRing;
     END;
 
 \end{lstlisting}
@@ -380,12 +415,16 @@ CREATE TRIGGER unSoloRingPorArbitro AFTER INSERT ON esArbitradaPor
 }
 
 \begin{lstlisting}[language=SQL]
-CREATE TRIGGER noPuedeArbitrarMayorGraduacion AFTER INSERT ON esArbitradaPor
+CREATE TRIGGER noPuedeArbitrarMayorGraduacion 
+AFTER INSERT ON esArbitradaPor
     BEGIN
-        Select Raise(Rollback, "Un arbitro no puede arbitrar una categoria de mayor graduacion que la suya.")
+        Select Raise(Rollback, "Un arbitro no puede arbitrar una "
+        "categoria de mayor graduacion que la suya.")
         From Competencia comp, CategoriaDan c, Arbitro a
-        Where new.idCompetencia = comp.idCompetencia And a.numDePlaca = new.numDePlacaArbitro 
-        And comp.idCategoria = c.idCategoria And a.graduacion <= c.dan;
+        Where new.idCompetencia = comp.idCompetencia 
+        And a.numDePlaca = new.numDePlacaArbitro 
+        And comp.idCategoria = c.idCategoria 
+        And a.graduacion <= c.dan;
     END;
 
 
@@ -395,18 +434,32 @@ CREATE TRIGGER noPuedeArbitrarMayorGraduacion AFTER INSERT ON esArbitradaPor
 }
 
 \begin{lstlisting}[language=SQL]
-CREATE TRIGGER sinModalidadesYCategoriasRepetidas AFTER INSERT ON Competencia
+CREATE TRIGGER sinModalidadesYCategoriasRepetidas 
+AFTER INSERT ON Competencia
     BEGIN
-        Select Raise(Rollback, "No puede haber dos competencias de igual modalidad y con categorias iguales .")
+        Select Raise(Rollback, "No puede haber dos competencias de "
+        "igual modalidad y con categorias iguales .")
         From Competencia comp, Categoria cNew, Categoria cOtra
-        Where new.idCompetencia != comp.idCompetencia And new.tipo = comp.tipo 
-        And new.idCategoria = cNew.idCategoria And comp.idCategoria = cOtra.idCategoria 
+        Where new.idCompetencia != comp.idCompetencia 
+        And new.tipo = comp.tipo 
+        And new.idCategoria = cNew.idCategoria 
+        And comp.idCategoria = cOtra.idCategoria 
         And cNew.genero = cOtra.genero
-        And Not Exists (Select 1 From CategoriaPeso cPN, CategoriaPeso cPO Where cNew.idCategoria = cPN.idCategoria 
-            And cOtra.idCategoria = cPO.idCategoria And cPN.minimo = cPO.minimo And cPN.maximo = cPO.maximo)
-        And Not Exists (Select 1 From CategoriaEdad cEN, CategoriaEdad cEO Where cNew.idCategoria = cEN.idCategoria 
-            And cOtra.idCategoria = cEO.idCategoria And cEN.minima = cEO.minima And cEN.maxima = cEO.maxima)
-        And Not Exists (Select 1 From CategoriaDan cDN, CategoriaDan cDO Where cNew.idCategoria = cDN.idCategoria 
-            And cOtra.idCategoria = cDO.idCategoria And cDN.dan = cDO.dan);
+        And Not Exists (Select 1 From CategoriaPeso cPN, 
+        CategoriaPeso cPO 
+        Where cNew.idCategoria = cPN.idCategoria 
+            And cOtra.idCategoria = cPO.idCategoria 
+            And cPN.minimo = cPO.minimo 
+            And cPN.maximo = cPO.maximo)
+        And Not Exists (Select 1 From CategoriaEdad cEN, 
+        CategoriaEdad cEO 
+        Where cNew.idCategoria = cEN.idCategoria 
+            And cOtra.idCategoria = cEO.idCategoria 
+            And cEN.minima = cEO.minima And cEN.maxima = cEO.maxima)
+        And Not Exists (Select 1 From CategoriaDan cDN, 
+        CategoriaDan cDO 
+        Where cNew.idCategoria = cDN.idCategoria 
+            And cOtra.idCategoria = cDO.idCategoria 
+            And cDN.dan = cDO.dan);
     END;
 \end{lstlisting}
