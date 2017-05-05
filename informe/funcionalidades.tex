@@ -3,27 +3,37 @@
 
 \emph{El listado de inscriptos en cada categoría par el armado de llaves.}
 \begin{lstlisting}[language=SQL]
-SELECT c.idCategoria , eid.numCertificado 
+SELECT c.idCategoria , eid.numCertificado
 FROM ( (
-	esIntegranteDe eid INNER JOIN Inscripcion i 
-	ON eid.idInscripcion = i.idInscripcion) 
-	
-	INNER JOIN  esEn ee 
-	ON ee.idInscripcion = i.idInscripcion) 
+  esIntegranteDe eid INNER JOIN Inscripcion i
+  ON eid.idInscripcion = i.idInscripcion)
 
-	INNER JOIN Competencia c 
-	ON c.idCompetencia = ee.idCompetencia
+  INNER JOIN  esEn ee
+  ON ee.idInscripcion = i.idInscripcion)
+
+  INNER JOIN Competencia c
+  ON c.idCompetencia = ee.idCompetencia
 
 ORDER BY eid.numCertificado;
 \end{lstlisting}
 
 \emph{El país que obtuvo mayor cantidad de medallas de oro, plata y bronce.}
 \begin{lstlisting}[language=SQL]
-SELECT	mas.idPais , COUNT(*) amount 
-FROM ( ( ( ( (esEn ee INNER JOIN Inscripcion i ON ee.idInscripcion = i.idInscripcion) INNER JOIN  esIntegranteDe eid ON eid.idInscripcion = i.idInscripcion ) INNER JOIN Estudiante e ON e.numCertificado = eid.numCertificado) INNER JOIN Escuela esc ON e.idEscuela = esc.idEscuela) INNER JOIN Mestro mas ON esc.idMaestro = mas.placaInstructor) 
-WHERE ee.puesto = 1 OR ee.puesto == 2 OR ee.puesto = 3 
-GROUP BY mas.idPais 
-ORDER BY amount ASC 
+SELECT mas.idPais , COUNT(*) amount
+FROM ( ( ( (
+    (esEn ee INNER JOIN Inscripcion i
+        ON ee.idInscripcion = i.idInscripcion)
+    INNER JOIN  esIntegranteDe eid
+        ON eid.idInscripcion = i.idInscripcion )
+    INNER JOIN Estudiante e
+        ON e.numCertificado = eid.numCertificado)
+    INNER JOIN Escuela esc
+        ON e.idEscuela = esc.idEscuela)
+    INNER JOIN Mestro mas
+        ON esc.idMaestro = mas.placaInstructor)
+WHERE ee.puesto = 1 OR ee.puesto == 2 OR ee.puesto = 3
+GROUP BY mas.idPais
+ORDER BY amount ASC
 LIMIT 1;
 \end{lstlisting}
 
@@ -32,51 +42,109 @@ LIMIT 1;
 \begin{lstlisting}[language=SQL]
 SELECT idPais , SUM(puntaje) puntajeTotal
 FROM
-		(SELECT	mas.idPais , 3*COUNT(*) puntaje 
-		FROM ( ( ( ( (esEn ee INNER JOIN Inscripcion i ON ee.idInscripcion = i.idInscripcion) INNER JOIN  esIntegranteDe eid ON eid.idInscripcion = i.idInscripcion ) INNER JOIN Estudiante e ON e.numCertificado = eid.numCertificado) INNER JOIN Escuela esc ON e.idEscuela = esc.idEscuela) INNER JOIN Mestro mas ON esc.idMaestro = mas.placaInstructor) 
-		WHERE ee.puesto = 1
-		GROUP BY mas.idPais)
+    (SELECT mas.idPais , 3*COUNT(*) puntaje
+    FROM ( ( ( (
+        (esEn ee INNER JOIN Inscripcion i
+            ON ee.idInscripcion = i.idInscripcion)
+        INNER JOIN  esIntegranteDe eid
+            ON eid.idInscripcion = i.idInscripcion )
+        INNER JOIN Estudiante e
+            ON e.numCertificado = eid.numCertificado)
+        INNER JOIN Escuela esc
+            ON e.idEscuela = esc.idEscuela)
+        INNER JOIN Mestro mas
+            ON esc.idMaestro = mas.placaInstructor)
+    WHERE ee.puesto = 1
+    GROUP BY mas.idPais)
 
-	UNION
+  UNION
 
-		(SELECT	mas.idPais , 2*COUNT(*) puntaje 
-		FROM ( ( ( ( (esEn ee INNER JOIN Inscripcion i ON ee.idInscripcion = i.idInscripcion) INNER JOIN  esIntegranteDe eid ON eid.idInscripcion = i.idInscripcion ) INNER JOIN Estudiante e ON e.numCertificado = eid.numCertificado) INNER JOIN Escuela esc ON e.idEscuela = esc.idEscuela) INNER JOIN Mestro mas ON esc.idMaestro = mas.placaInstructor) 
-		WHERE ee.puesto = 2
-		GROUP BY mas.idPais)
+    (SELECT mas.idPais , 2*COUNT(*) puntaje
+    FROM ( ( ( (
+        (esEn ee INNER JOIN Inscripcion i
+            ON ee.idInscripcion = i.idInscripcion)
+        INNER JOIN  esIntegranteDe eid
+            ON eid.idInscripcion = i.idInscripcion )
+        INNER JOIN Estudiante e
+            ON e.numCertificado = eid.numCertificado)
+        INNER JOIN Escuela esc
+            ON e.idEscuela = esc.idEscuela)
+        INNER JOIN Mestro mas
+            ON esc.idMaestro = mas.placaInstructor)
+    WHERE ee.puesto = 2
+    GROUP BY mas.idPais)
 
-	UNION
+  UNION
 
-		(SELECT	mas.idPais , COUNT(*) puntaje 
-		FROM ( ( ( ( (esEn ee INNER JOIN Inscripcion i ON ee.idInscripcion = i.idInscripcion) INNER JOIN  esIntegranteDe eid ON eid.idInscripcion = i.idInscripcion ) INNER JOIN Estudiante e ON e.numCertificado = eid.numCertificado) INNER JOIN Escuela esc ON e.idEscuela = esc.idEscuela) INNER JOIN Mestro mas ON esc.idMaestro = mas.placaInstructor) 
-		WHERE ee.puesto = 3
-		GROUP BY mas.idPais)
+    (SELECT mas.idPais , COUNT(*) puntaje
+    FROM ( ( ( (
+        (esEn ee INNER JOIN Inscripcion i
+            ON ee.idInscripcion = i.idInscripcion)
+        INNER JOIN  esIntegranteDe eid
+            ON eid.idInscripcion = i.idInscripcion )
+        INNER JOIN Estudiante e
+            ON e.numCertificado = eid.numCertificado)
+        INNER JOIN Escuela esc
+            ON e.idEscuela = esc.idEscuela)
+        INNER JOIN Mestro mas
+            ON esc.idMaestro = mas.placaInstructor)
+    WHERE ee.puesto = 3
+    GROUP BY mas.idPais)
 
 GROUP BY idPais
 ORDER BY puntajeTotal ASC;
 
 
-
-
 SELECT idEscuela  , SUM(puntaje) puntajeTotal
 FROM
-		(SELECT	mas.idEscuela , 3*COUNT(*) puntaje 
-		FROM ( ( ( ( (esEn ee INNER JOIN Inscripcion i ON ee.idInscripcion = i.idInscripcion) INNER JOIN  esIntegranteDe eid ON eid.idInscripcion = i.idInscripcion ) INNER JOIN Estudiante e ON e.numCertificado = eid.numCertificado) INNER JOIN Escuela esc ON e.idEscuela = esc.idEscuela) INNER JOIN Mestro mas ON esc.idMaestro = mas.placaInstructor) 
-		WHERE ee.puesto = 1
-		GROUP BY mas.idEscuela)
+    (SELECT mas.idEscuela, 3 * COUNT(*) puntaje
+    FROM ( ( ( (
+        (esEn ee INNER JOIN Inscripcion i
+            ON ee.idInscripcion = i.idInscripcion)
+        INNER JOIN  esIntegranteDe eid
+            ON eid.idInscripcion = i.idInscripcion )
+        INNER JOIN Estudiante e
+            ON e.numCertificado = eid.numCertificado)
+        INNER JOIN Escuela esc
+            ON e.idEscuela = esc.idEscuela)
+        INNER JOIN Mestro mas
+            ON esc.idMaestro = mas.placaInstructor)
+    WHERE ee.puesto = 1
+    GROUP BY mas.idEscuela)
 
-	UNION
+  UNION
 
-		(SELECT	mas.idEscuela , 2*COUNT(*) puntaje 
-		FROM ( ( ( ( (esEn ee INNER JOIN Inscripcion i ON ee.idInscripcion = i.idInscripcion) INNER JOIN  esIntegranteDe eid ON eid.idInscripcion = i.idInscripcion ) INNER JOIN Estudiante e ON e.numCertificado = eid.numCertificado) INNER JOIN Escuela esc ON e.idEscuela = esc.idEscuela) INNER JOIN Mestro mas ON esc.idMaestro = mas.placaInstructor) 
-		WHERE ee.puesto = 2
-		GROUP BY mas.idEscuela)
+    (SELECT mas.idEscuela , 2*COUNT(*) puntaje
+    FROM ( ( ( (
+        (esEn ee INNER JOIN Inscripcion i
+            ON ee.idInscripcion = i.idInscripcion)
+        INNER JOIN  esIntegranteDe eid
+            ON eid.idInscripcion = i.idInscripcion )
+        INNER JOIN Estudiante e
+            ON e.numCertificado = eid.numCertificado)
+        INNER JOIN Escuela esc
+            ON e.idEscuela = esc.idEscuela)
+        INNER JOIN Mestro mas
+            ON esc.idMaestro = mas.placaInstructor)
+    WHERE ee.puesto = 2
+    GROUP BY mas.idEscuela)
 
-	UNION
+  UNION
 
-		(SELECT	mas.idEscuela , COUNT(*) puntaje 
-		FROM ( ( ( ( (esEn ee INNER JOIN Inscripcion i ON ee.idInscripcion = i.idInscripcion) INNER JOIN  esIntegranteDe eid ON eid.idInscripcion = i.idInscripcion ) INNER JOIN Estudiante e ON e.numCertificado = eid.numCertificado) INNER JOIN Escuela esc ON e.idEscuela = esc.idEscuela) INNER JOIN Mestro mas ON esc.idMaestro = mas.placaInstructor) 
-		WHERE ee.puesto = 3
-		GROUP BY mas.idEscuela)
+    (SELECT mas.idEscuela , COUNT(*) puntaje
+    FROM ( ( ( (
+        (esEn ee INNER JOIN Inscripcion i
+            ON ee.idInscripcion = i.idInscripcion)
+        INNER JOIN  esIntegranteDe eid
+            ON eid.idInscripcion = i.idInscripcion )
+        INNER JOIN Estudiante e
+            ON e.numCertificado = eid.numCertificado)
+        INNER JOIN Escuela esc
+            ON e.idEscuela = esc.idEscuela)
+        INNER JOIN Mestro mas
+            ON esc.idMaestro = mas.placaInstructor)
+    WHERE ee.puesto = 3
+    GROUP BY mas.idEscuela)
 
 GROUP BY idEscuela
 ORDER BY puntajeTotal ASC;
@@ -85,8 +153,13 @@ ORDER BY puntajeTotal ASC;
 
 \emph{Dado un competidor, la lista de categorías donde haya participado y el resultado obtenido.}
 \begin{lstlisting}[language=SQL]
-SELECT	comp.idCategoria , ee.puesto
-FROM ( ( esIntegranteDe eid INNER JOIN inscripcion i ON eid.idInscripcion = i.idInscripcion ) INNER JOIN esEn ee ON ee.idInscripcion = i.idInscripcion) INNER JOIN Competencia comp ON ee.idCompetencia = comp.idCompetencia 
+SELECT comp.idCategoria , ee.puesto
+FROM (
+    (esIntegranteDe eid INNER JOIN inscripcion i
+     ON eid.idInscripcion = i.idInscripcion )
+    INNER JOIN esEn ee ON ee.idInscripcion = i.idInscripcion)
+    INNER JOIN Competencia comp
+        ON ee.idCompetencia = comp.idCompetencia
 WHERE eid.numCertificado =: @numcert;
 \end{lstlisting}
 
@@ -95,23 +168,100 @@ WHERE eid.numCertificado =: @numcert;
 
 \emph{El medallero por escuela.}
 \begin{lstlisting}[language=SQL]
-%% ACA LA QUERY
+Select idEscBronces idEscuela, cantOros, cantPlatas, cantBronces
+from (select escuela.idEscuela idEscBronces ,
+             COUNT(broncesPorEsc.idEsc) cantBronces
+             from Escuela
+      left join
+      (Select distinct  E.idEscuela idEsc , I.idInscripcion
+      from esen
+      inner join inscripcion I
+          on esen.idInscripcion = I.idInscripcion
+      inner join esIntegranteDe esIntDe
+          on esIntDe.idInscripcion = I.idInscripcion
+      inner join Estudiante E
+          on esIntDe.numCertificado = E.numCertificado
+      where esen.puesto = 3) broncesPorEsc
+
+ on Escuela.idEscuela= broncesPorEsc.idEsc
+ group by Escuela.idEscuela) bronces
+
+ inner join (select escuela.idEscuela idEscPlatas,
+                    COUNT(platasPorEsc.idEsc) cantPlatas
+  from Escuela
+left join
+(Select distinct  E.idEscuela idEsc , I.idInscripcion from esen
+inner join inscripcion I
+    on esen.idInscripcion = I.idInscripcion
+inner join esIntegranteDe esIntDe
+    on esIntDe.idInscripcion = I.idInscripcion
+inner join Estudiante E
+    on esIntDe.numCertificado = E.numCertificado
+where esen.puesto = 2) platasPorEsc
+
+ on Escuela.idEscuela= platasPorEsc.idEsc
+ group by Escuela.idEscuela) platas
+
+ on bronces.idEscBronces = platas.idEscPlatas
+
+ inner join
+ (select escuela.idEscuela idEscOros , COUNT(orosPorEsc.idEsc) cantOros
+  from Escuela
+left join
+(Select distinct  E.idEscuela idEsc , I.idInscripcion from esen
+inner join inscripcion I
+    on esen.idInscripcion = I.idInscripcion
+inner join esIntegranteDe esIntDe
+    on esIntDe.idInscripcion = I.idInscripcion
+inner join Estudiante E
+    on esIntDe.numCertificado = E.numCertificado
+where esen.puesto = 1) orosPorEsc
+
+ on Escuela.idEscuela= orosPorEsc.idEsc
+ group by Escuela.idEscuela) oros
+
+ on oros.idEscOros=platas.idEscPlatas
 \end{lstlisting}
 
 
 \emph{El listado de árbitros por país.}
 \begin{lstlisting}[language=SQL]
-%% ACA LA QUERY
+select DISTINCT p.nombre pNom , A.nombre, A.apellido,
+                A.numDePlaca placa
+from pais p
+inner join arbitro A on p.idPais = a.idPais
+order by pNom
 \end{lstlisting}
 
 
 \emph{La lista de árbitros que actuaron como árbitro central en las modalidades de combate.}
 \begin{lstlisting}[language=SQL]
-%% ACA LA QUERY
+select DISTINCT   A.nombre, A.apellido , A.numDePlaca placa
+from esarbitradapor eap
+inner join arbitro A on eap.numDeplacaArbitro = A.numDePlaca
+inner join competencia  C on C.IdCompetencia = eap.idCompetencia
+
+where C.tipo = 'C' and eap.funcionDelArbitro = 'Central'
 \end{lstlisting}
 
 
 \emph{La lista de equipos por país.}
 \begin{lstlisting}[language=SQL]
-%% ACA LA QUERY
+select DISTINCT P.nombre pNombre , Ig.nombre equipo
+from pais P
+inner join maestro M
+    on M.idPais = P.idPais
+inner join Escuela E
+    on E.idMaestro = M.placaInstructor
+inner join Estudiante Est
+    on Est.idEscuela = E.idEscuela
+inner join esintegrantede eid
+    on est.numCertificado = eid.numCertificado
+inner join Inscripcion I
+    on I.idInscripcion = eid.idInscripcion
+inner join Inscripciongrupal Ig
+    on I.idInscripcion = Ig.idInscripcion
+
+where I.grupaloIndividual ='G'
+order by pNombre
 \end{lstlisting}
