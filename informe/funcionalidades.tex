@@ -52,14 +52,14 @@ FROM
             ON e.numCertificado = eid.numCertificado)
         INNER JOIN Escuela esc
             ON e.idEscuela = esc.idEscuela)
-        INNER JOIN Mestro mas
+        INNER JOIN Maestro mas
             ON esc.idMaestro = mas.placaInstructor)
     WHERE ee.puesto = 1
-    GROUP BY mas.idPais)
+    GROUP BY mas.idPais
 
-  UNION
+  UNION ALL
 
-    (SELECT mas.idPais , 2*COUNT(*) puntaje
+    SELECT mas.idPais , 2*COUNT(*) puntaje
     FROM ( ( ( (
         (esEn ee INNER JOIN Inscripcion i
             ON ee.idInscripcion = i.idInscripcion)
@@ -69,14 +69,14 @@ FROM
             ON e.numCertificado = eid.numCertificado)
         INNER JOIN Escuela esc
             ON e.idEscuela = esc.idEscuela)
-        INNER JOIN Mestro mas
+        INNER JOIN Maestro mas
             ON esc.idMaestro = mas.placaInstructor)
     WHERE ee.puesto = 2
-    GROUP BY mas.idPais)
+    GROUP BY mas.idPais
 
-  UNION
+  UNION ALL
 
-    (SELECT mas.idPais , COUNT(*) puntaje
+    SELECT mas.idPais , COUNT(*) puntaje
     FROM ( ( ( (
         (esEn ee INNER JOIN Inscripcion i
             ON ee.idInscripcion = i.idInscripcion)
@@ -86,7 +86,7 @@ FROM
             ON e.numCertificado = eid.numCertificado)
         INNER JOIN Escuela esc
             ON e.idEscuela = esc.idEscuela)
-        INNER JOIN Mestro mas
+        INNER JOIN Maestro mas
             ON esc.idMaestro = mas.placaInstructor)
     WHERE ee.puesto = 3
     GROUP BY mas.idPais)
@@ -107,14 +107,14 @@ FROM
             ON e.numCertificado = eid.numCertificado)
         INNER JOIN Escuela esc
             ON e.idEscuela = esc.idEscuela)
-        INNER JOIN Mestro mas
+        INNER JOIN Maestro mas
             ON esc.idMaestro = mas.placaInstructor)
     WHERE ee.puesto = 1
-    GROUP BY mas.idEscuela)
+    GROUP BY mas.idEscuela
 
-  UNION
+  UNION ALL
 
-    (SELECT mas.idEscuela , 2*COUNT(*) puntaje
+    SELECT mas.idEscuela , 2*COUNT(*) puntaje
     FROM ( ( ( (
         (esEn ee INNER JOIN Inscripcion i
             ON ee.idInscripcion = i.idInscripcion)
@@ -124,14 +124,14 @@ FROM
             ON e.numCertificado = eid.numCertificado)
         INNER JOIN Escuela esc
             ON e.idEscuela = esc.idEscuela)
-        INNER JOIN Mestro mas
+        INNER JOIN Maestro mas
             ON esc.idMaestro = mas.placaInstructor)
     WHERE ee.puesto = 2
-    GROUP BY mas.idEscuela)
+    GROUP BY mas.idEscuela
 
-  UNION
+  UNION ALL
 
-    (SELECT mas.idEscuela , COUNT(*) puntaje
+    SELECT mas.idEscuela , COUNT(*) puntaje
     FROM ( ( ( (
         (esEn ee INNER JOIN Inscripcion i
             ON ee.idInscripcion = i.idInscripcion)
@@ -141,7 +141,7 @@ FROM
             ON e.numCertificado = eid.numCertificado)
         INNER JOIN Escuela esc
             ON e.idEscuela = esc.idEscuela)
-        INNER JOIN Mestro mas
+        INNER JOIN Maestro mas
             ON esc.idMaestro = mas.placaInstructor)
     WHERE ee.puesto = 3
     GROUP BY mas.idEscuela)
