@@ -94,10 +94,13 @@ FROM
 GROUP BY idPais
 ORDER BY puntajeTotal ASC;
 
+
+
+
 SELECT idEscuela  , SUM(puntaje) puntajeTotal
 FROM
-    (SELECT mas.idEscuela, 3 * COUNT(*) puntaje
-    FROM ( ( ( (
+    (SELECT esc.idEscuela, 3 * COUNT(*) puntaje
+    FROM ( ( (
         (esEn ee INNER JOIN Inscripcion i
             ON ee.idInscripcion = i.idInscripcion)
         INNER JOIN  esIntegranteDe eid
@@ -106,15 +109,13 @@ FROM
             ON e.numCertificado = eid.numCertificado)
         INNER JOIN Escuela esc
             ON e.idEscuela = esc.idEscuela)
-        INNER JOIN Maestro mas
-            ON esc.idMaestro = mas.placaInstructor)
     WHERE ee.puesto = 1
-    GROUP BY mas.idEscuela
+    GROUP BY esc.idEscuela
 
   UNION ALL
 
-    SELECT mas.idEscuela , 2*COUNT(*) puntaje
-    FROM ( ( ( (
+    SELECT esc.idEscuela , 2*COUNT(*) puntaje
+    FROM ( ( (
         (esEn ee INNER JOIN Inscripcion i
             ON ee.idInscripcion = i.idInscripcion)
         INNER JOIN  esIntegranteDe eid
@@ -123,15 +124,13 @@ FROM
             ON e.numCertificado = eid.numCertificado)
         INNER JOIN Escuela esc
             ON e.idEscuela = esc.idEscuela)
-        INNER JOIN Maestro mas
-            ON esc.idMaestro = mas.placaInstructor)
     WHERE ee.puesto = 2
-    GROUP BY mas.idEscuela
+    GROUP BY esc.idEscuela
 
   UNION ALL
 
-    SELECT mas.idEscuela , COUNT(*) puntaje
-    FROM ( ( ( (
+    SELECT esc.idEscuela , COUNT(*) puntaje
+    FROM ( ( (
         (esEn ee INNER JOIN Inscripcion i
             ON ee.idInscripcion = i.idInscripcion)
         INNER JOIN  esIntegranteDe eid
@@ -140,14 +139,11 @@ FROM
             ON e.numCertificado = eid.numCertificado)
         INNER JOIN Escuela esc
             ON e.idEscuela = esc.idEscuela)
-        INNER JOIN Maestro mas
-            ON esc.idMaestro = mas.placaInstructor)
     WHERE ee.puesto = 3
-    GROUP BY mas.idEscuela)
+    GROUP BY esc.idEscuela)
 
 GROUP BY idEscuela
 ORDER BY puntajeTotal ASC;
-
 \end{lstlisting}
 
 

@@ -10,14 +10,19 @@ Si bien en un sistema en producción éstas deberían realizarse mediante una so
 \emph{Para una escuela, tiene que haber un coach cada 5 competidores.}
 
 \begin{lstlisting}[language=SQL]
-select (
-    select count(p.numcertificado)
-    from participante p, estudiante e
-    where p.numcertificado = e.numcertificado and e.idescuela = @idEscuela)
-  <= 5* (
-    select count(c.numcertificado)
-    from coach c, estudiante e
-    where c.numcertificado = e.numcertificado and e.idescuela = @idEscuela);
+select not exists (
+  select  1
+  from escuela esc
+  where not (
+        select count(p.numcertificado)
+        from participante p, estudiante e
+        where p.numcertificado = e.numcertificado and
+              e.idescuela = esc.idescuela)
+      <= 5* (
+        select count(c.numcertificado)
+        from coach c, estudiante e
+        where c.numcertificado = e.numcertificado and
+              e.idescuela = esc.idescuela));
 \end{lstlisting}
 
 \emph{Si una inscripcion es grupal, debe tener 8 participantes, 5 titulares y 3 suplentes.}
