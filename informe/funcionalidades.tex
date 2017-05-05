@@ -39,6 +39,8 @@ LIMIT 1;
 
 
 \emph{Sabiendo que las medallas de oro suman 3 puntos, las de plata 2 y las de bronce 1 punto, se quiere realizar un ranking de puntaje por país y otro por escuela.}
+
+\indent\emph{Por país}
 \begin{lstlisting}[language=SQL]
 SELECT idPais , SUM(puntaje) puntajeTotal
 FROM
@@ -93,10 +95,11 @@ FROM
 
 GROUP BY idPais
 ORDER BY puntajeTotal ASC;
+\end{lstlisting}
 
+\indent\emph{Por escuela}
 
-
-
+\begin{lstlisting}[language=SQL]
 SELECT idEscuela  , SUM(puntaje) puntajeTotal
 FROM
     (SELECT esc.idEscuela, 3 * COUNT(*) puntaje
