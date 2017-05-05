@@ -257,18 +257,6 @@ select not exists (
     where e.idcompetencia = c.idcompetencia) >= 3);
 
 
-select (
-  select count(e.idinscripcion)
-  from esen e
-  where e.idcompetencia = @idCompetencia and e.puesto = 1) = 1 and (
-  select count(e.idinscripcion)
-  from esen e
-  where e.idcompetencia = @idCompetencia and e.puesto = 2) = 1 and (
-  select count(e.idinscripcion)
-  from esen e
-  where e.idcompetencia = @idCompetencia and e.puesto = 3) = 1;
-
-
 select not exists (
 select 1
 from competencia cc
