@@ -59,16 +59,19 @@ select not exists (
 \emph{Para cada competencia (luego de haberse jugado) tiene que haber exactamente un primer puesto y exactamente un segundo puesto y exactamente un tercer puesto.}
 
 \begin{lstlisting}[language=SQL]
-select (
+select not exists (
+select 1
+from competencia cc
+where not (
   select count(e.idinscripcion)
   from esen e
-  where e.idcompetencia = @idCompetencia and e.puesto = 1) = 1 and (
+  where e.idcompetencia = cc.idcompetencia and e.puesto = 1) = 1 and (
   select count(e.idinscripcion)
   from esen e
-  where e.idcompetencia = @idCompetencia and e.puesto = 2) = 1 and (
+  where e.idcompetencia = cc.idcompetencia and e.puesto = 2) = 1 and (
   select count(e.idinscripcion)
   from esen e
-  where e.idcompetencia = @idCompetencia and e.puesto = 3) = 1;
+  where e.idcompetencia = cc.idcompetencia and e.puesto = 3) = 1);
 \end{lstlisting}
 
 \emph{En cada competencia tiene que haber al menos un presidente de mesa, un arbitro central, varios jueces y 3 suplentes.}
