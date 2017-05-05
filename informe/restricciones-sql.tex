@@ -28,26 +28,32 @@ select not exists (
 \emph{Si una inscripcion es grupal, debe tener 8 participantes, 5 titulares y 3 suplentes.}
 
 \begin{lstlisting}[language=SQL]
-select (
-  select count(p.numcertificado)
-  from participante p, esintegrantede e
-  where e.numcertificado = p.numcertificado and
-              e.idinscripcion = @idInscripcionGrupal and
-	      e.estitular) = 5 and (
-  select count(p.numcertificado)
-  from participante p, esintegrantede e
-  where e.numcertificado = p.numcertificado and
-              e.idinscripcion = @idInscripcionGrupal and
-	      not e.estitular) = 3;
+select not exists (
+  select 1
+  from inscripciongrupal ig
+  where not (
+    (select count(p.numcertificado)
+    from participante p, esintegrantede e
+    where e.numcertificado = p.numcertificado and
+                e.idinscripcion = ig.idinscripcion and
+                e.estitular) = 5 and (
+    select count(p.numcertificado)
+    from participante p, esintegrantede e
+    where e.numcertificado = p.numcertificado and
+                e.idinscripcion = ig.idinscripcion and
+	        not e.estitular) = 3));
 \end{lstlisting}
 
 \emph{Toda competencia tiene minimo 3 inscriptos.}
 
 \begin{lstlisting}[language=SQL]
-select (
-  select count(e.idinscripcion)
-  from esen e
-  where e.idcompetencia = @idCompetencia) >= 3;
+select not exists (
+  select 1
+  from competencia c
+  where not  (
+    select count(e.idinscripcion)
+    from esen e
+    where e.idcompetencia = c.idcompetencia) >= 3);
 \end{lstlisting}
 
 \emph{Para cada competencia (luego de haberse jugado) tiene que haber exactamente un primer puesto y exactamente un segundo puesto y exactamente un tercer puesto.}
@@ -68,35 +74,41 @@ select (
 \emph{En cada competencia tiene que haber al menos un presidente de mesa, un arbitro central, varios jueces y 3 suplentes.}
 
 \begin{lstlisting}[language=SQL]
-select (
-  select count(e.numdeplacaarbitro)
-  from esarbitradapor e
-  where e.idcompetencia = @idCompetencia and
-        e.funciondelarbitro = "PresidenteDeMesa") >= 1 and (
-  select count(e.numdeplacaarbitro)
-  from esarbitradapor e
-  where e.idcompetencia = @idCompetencia and
-        e.funciondelarbitro = "Central") >= 1 and (
-  select count(e.numdeplacaarbitro)
-  from esarbitradapor e
-  where e.idcompetencia = @idCompetencia and
-        e.funciondelarbitro = "Juez") >= 2 and (
-  select count(e.numdeplacaarbitro)
-  from esarbitradapor e
-  where e.idcompetencia = @idCompetencia and
-        e.funciondelarbitro = "Suplente") >= 3;
+select not exists (
+  select 1
+  from competencia cc
+  where not (
+    select count(e.numdeplacaarbitro)
+    from esarbitradapor e
+    where e.idcompetencia = cc.idcompetencia and
+          e.funciondelarbitro = "PresidenteDeMesa") >= 1 and (
+    select count(e.numdeplacaarbitro)
+    from esarbitradapor e
+    where e.idcompetencia = cc.idcompetencia and
+          e.funciondelarbitro = "Central") >= 1 and (
+    select count(e.numdeplacaarbitro)
+    from esarbitradapor e
+    where e.idcompetencia = cc.idcompetencia and
+          e.funciondelarbitro = "Juez") >= 2 and (
+    select count(e.numdeplacaarbitro)
+    from esarbitradapor e
+    where e.idcompetencia = cc.idcompetencia and
+          e.funciondelarbitro = "Suplente") >= 3);
 \end{lstlisting}
 
 \emph{El numero de jueces debe ser mayor o igual que el cantidadDeArbitros de la competencia.}
 
 \begin{lstlisting}[language=SQL]
-select (
-  select count(e.numdeplacaarbitro)
-  from esarbitradapor e
-  where e.idcompetencia = @idCompetencia) = (
-  select c.cantidaddearbitros
-  from competencia c
-  where c.idcompetencia = @idCompetencia);
+select not exists (
+  select 1
+  from competencia cc
+  where not (
+    select count(e.numdeplacaarbitro)
+    from esarbitradapor e
+    where e.idcompetencia = cc.idcompetencia) >= (
+    select c.cantidaddearbitros
+    from competencia c
+    where c.idcompetencia = cc.idcompetencia));
 \end{lstlisting}
 
 \subsubsection{Triggers}
