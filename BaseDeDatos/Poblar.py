@@ -28,6 +28,9 @@ listaApellidos = ["Silva",
                   "Reynolds",
                   "Qiu1"]
 
+listaNombresExtra = [ chr(i) for i in range(ord("a"), ord("c")) ]
+listaApellidosExtra = [ chr(i) for i in range(ord("a"), ord("c")) ]
+
 l = len(listaNombres)
 
 def generarMaestro():
@@ -48,8 +51,8 @@ def generarEstudiante():
             for p in [50, 60]
             for e in range(len(list(generarEscuela())))]
     return [ (i, *rest) for i, rest in enumerate([ (n, a, *choice(carac))
-                                                 for n in listaNombres
-                                                 for a in listaApellidos])]
+                                                 for n in listaNombres + listaNombresExtra
+                                                 for a in listaApellidos + listaApellidosExtra])]
 
 def generarParticipantes(est):
 
@@ -272,7 +275,7 @@ conn.commit()
 for e in esen:
     try:
         c.execute('insert into esen values(?,?,?)', e)
+        conn.commit()
     except:
         pass
-conn.commit()
 
