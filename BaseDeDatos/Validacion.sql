@@ -1,4 +1,4 @@
-  select  esc.idEscuela
+  select  esc.idEscuela as "Escuelas que tienen menos de 1 coach cada 5 competidores."
   from escuela esc
   where not (
         select count(p.numcertificado)
@@ -12,7 +12,7 @@
               e.idescuela = esc.idescuela);
 
 
-  select ig.idinscripcion
+  select ig.idinscripcion as "Inscripciones grupales sin 5 titulares y 3 suplentes."
   from inscripciongrupal ig
   where not (
     (select count(p.numcertificado)
@@ -26,7 +26,7 @@
                 e.idinscripcion = ig.idinscripcion and
 	        not e.estitular) = 3);
 
-  select c.idcompetencia
+  select c.idcompetencia as "Competencias con menos de 3 participantes."
   from competencia c
   where not  (
     select count(e.idinscripcion)
@@ -34,7 +34,7 @@
     where e.idcompetencia = c.idcompetencia) >= 3;
 
 
-select cc.idcompetencia
+select cc.idcompetencia as "Competencias sin exactamente un primer, segundo y tercer puesto."
 from competencia cc
 where not (
   select count(e.idinscripcion)
@@ -48,7 +48,7 @@ where not (
   where e.idcompetencia = cc.idcompetencia and e.puesto = 3) = 1;
 
 
-select cc.idcompetencia
+select cc.idcompetencia as "Competencias sin un Presidente de Mesa, un Árbitro Central, 2 Jueces y 3 Suplentes."
   from competencia cc
   where not (
     select count(e.numdeplacaarbitro)
@@ -68,7 +68,7 @@ select cc.idcompetencia
     where e.idcompetencia = cc.idcompetencia and
           e.funciondelarbitro = "Suplente") >= 3;
 
-select cc.idcompetencia
+select cc.idcompetencia as "Competencias con menor cantidad de árbitros que la requerida por la categoría."
   from competencia cc
   where not (
     select count(e.numdeplacaarbitro)
