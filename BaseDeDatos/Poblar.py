@@ -66,7 +66,8 @@ def generarCompetencia(cats):
     comps = [ (i, *r) for i, r in enumerate([ (c[0], 1, t)
                                              for t in tipos
                                              for c in cats[t]])]
-    modalidades = [ map(lambda x: (x[0],), (filter(lambda c: c[-1] == t, comps))) for t in tipos]
+    #modalidades = [ map(lambda x: (x[0],), (filter(lambda c: c[-1] == t, comps))) for t in tipos]
+    modalidades = [ [ (c[0],) for c in comps if c[-1] == t ] for t in tipos ]
     return comps, modalidades
 
 def generarCategoria():
@@ -135,10 +136,12 @@ def generarInscripciones(estudiantes, participantes, coaches, competencias,cat, 
         for j in range(len(estudiantes)):
             if i == j or estudiantes[i][7] != estudiantes[j][7]:
                 continue
-            estudiante = estudiantes[j]
+            estudiante = estudiantes[i]
             edad_e = 2017 - participantes[i][2]
             competencia_i  =  0
             for x in competencias:
+                if (x[3] == "cE"):
+                    continue
                 categoria = categorias[x[1]]
                 if categoria[1] != estudiante[3]:
                     continue
@@ -159,9 +162,9 @@ def generarInscripciones(estudiantes, participantes, coaches, competencias,cat, 
                     if salir: break
                 if salir: continue
                 id_ = (i + j * len(estudiantes)) * len(competencias) + competencia_i
-                inscripciones.append((id_, estudiantes[i][0], "I"))
+                inscripciones.append((id_, estudiantes[j][0], "I"))
                 individual.append((id_, ))
-                esintegrantede.append((estudiantes[j][0], id_, True))
+                esintegrantede.append((estudiantes[i][0], id_, True))
                 if (x[0], id_) not in puestos_competencias:
                     esen.append((x[0], id_, 1))
                     puestos_competencias[(x[0], id_)] = 2
@@ -170,6 +173,7 @@ def generarInscripciones(estudiantes, participantes, coaches, competencias,cat, 
                     puestos_competencias[(x[0], id_)] += 1
                 ultimo_id = id_
                 competencia_i += 1
+            break
 
     inscripciones.append((ultimo_id + 1, 1, "G"))
     grupal.append((ultimo_id + 1, "nombre"))
@@ -272,10 +276,5 @@ conn.commit()
 c.executemany('insert into esintegrantede values(?,?,?)', esintegrantede)
 conn.commit()
 
-for e in esen:
-    try:
-        c.execute('insert into esen values(?,?,?)', e)
-        conn.commit()
-    except Exception as err:
-        pass
-
+c.executemany('insert into esen values(?,?,?)', esen)
+conn.commit()
