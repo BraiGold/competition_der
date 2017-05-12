@@ -28,10 +28,13 @@
 
   select c.idcompetencia as "Competencias con menos de 3 participantes."
   from competencia c
-  where not  (
+  where not ((
     select count(e.idinscripcion)
     from esen e
-    where e.idcompetencia = c.idcompetencia) >= 3;
+    where e.idcompetencia = c.idcompetencia) >= 3) and not ((
+    select count(e.idinscripcion)
+    from esen e
+    where e.idcompetencia = c.idcompetencia) == 0);
 
 
 select cc.idcompetencia as "Competencias sin exactamente un primer, segundo y tercer puesto."

@@ -272,7 +272,7 @@ conn.commit()
 for e in esen:
     try:
         c.execute('insert into esen values(?,?,?)', e)
+        conn.commit()
     except:
         pass
-conn.commit()
 
