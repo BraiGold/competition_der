@@ -218,8 +218,7 @@ CREATE TRIGGER individualEsTitular AFTER INSERT ON esIntegranteDe
 -- Consultas ---------------------
 ----------------------------------
 
-select not exists (
-  select  1
+  select  esc.idEscuela
   from escuela esc
   where not (
         select count(p.numcertificado)
@@ -230,11 +229,10 @@ select not exists (
         select count(c.numcertificado)
         from coach c, estudiante e
         where c.numcertificado = e.numcertificado and
-              e.idescuela = esc.idescuela));
+              e.idescuela = esc.idescuela);
 
 
-select not exists (
-  select 1
+  select ig.idinscripcion
   from inscripciongrupal ig
   where not (
     (select count(p.numcertificado)
@@ -246,19 +244,17 @@ select not exists (
     from participante p, esintegrantede e
     where e.numcertificado = p.numcertificado and
                 e.idinscripcion = ig.idinscripcion and
-	        not e.estitular) = 3));
+	        not e.estitular) = 3);
 
-select not exists (
-  select 1
+  select c.idcompetencia
   from competencia c
   where not  (
     select count(e.idinscripcion)
     from esen e
-    where e.idcompetencia = c.idcompetencia) >= 3);
+    where e.idcompetencia = c.idcompetencia) >= 3;
 
 
-select not exists (
-select 1
+select cc.idcompetencia
 from competencia cc
 where not (
   select count(e.idinscripcion)
@@ -269,11 +265,10 @@ where not (
   where e.idcompetencia = cc.idcompetencia and e.puesto = 2) = 1 and (
   select count(e.idinscripcion)
   from esen e
-  where e.idcompetencia = cc.idcompetencia and e.puesto = 3) = 1);
+  where e.idcompetencia = cc.idcompetencia and e.puesto = 3) = 1;
 
 
-select not exists (
-  select 1
+select cc.idcompetencia
   from competencia cc
   where not (
     select count(e.numdeplacaarbitro)
@@ -291,10 +286,9 @@ select not exists (
     select count(e.numdeplacaarbitro)
     from esarbitradapor e
     where e.idcompetencia = cc.idcompetencia and
-          e.funciondelarbitro = "Suplente") >= 3);
+          e.funciondelarbitro = "Suplente") >= 3;
 
-select not exists (
-  select 1
+select cc.idcompetencia
   from competencia cc
   where not (
     select count(e.numdeplacaarbitro)
@@ -302,4 +296,4 @@ select not exists (
     where e.idcompetencia = cc.idcompetencia) >= (
     select c.cantidaddearbitros
     from competencia c
-    where c.idcompetencia = cc.idcompetencia));
+    where c.idcompetencia = cc.idcompetencia);
