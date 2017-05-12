@@ -164,12 +164,12 @@ def generarInscripciones(estudiantes, participantes, coaches, competencias,cat, 
                     puestos_competencias[(x[0], id_)] = 2
                 else:
                     esen.append((x[0], id_, puestos_competencias[(x[0], id_)]))
-                    puestos_competencias[(x[0], id_, 1)] += 1
+                    puestos_competencias[(x[0], id_)] += 1
                 ultimo_id = id_
                 competencia_i += 1
 
     inscripciones.append((ultimo_id + 1, 1, "G"))
-    grupal.append((ultimo_id + 1, ))
+    grupal.append((ultimo_id + 1, "nombre"))
     esintegrantede.append((3, ultimo_id + 1, True))
     esintegrantede.append((8, ultimo_id + 1, True))
     esintegrantede.append((11, ultimo_id + 1, True))
@@ -260,12 +260,19 @@ conn.commit()
 c.executemany('insert into inscripcion values(?,?,?)', inscripciones)
 conn.commit()
 
-c.executemany('insert into inscripcionindividual  values(?)', individual)
+c.executemany('insert into inscripcionindividual values(?)', individual)
+conn.commit()
+
+c.executemany('insert into inscripciongrupal values(?,?)', grupal)
 conn.commit()
 
 c.executemany('insert into esintegrantede values(?,?,?)', esintegrantede)
 conn.commit()
 
-c.executemany('insert into esen values(?,?,?)', esen)
+for e in esen:
+    try:
+        c.execute('insert into esen values(?,?,?)', e)
+    except:
+        pass
 conn.commit()
 
