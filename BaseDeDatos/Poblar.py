@@ -159,9 +159,9 @@ def generarInscripciones(estudiantes, participantes, coaches, competencias,cat, 
                     if salir: break
                 if salir: continue
                 id_ = (i + j * len(estudiantes)) * len(competencias) + competencia_i
-                inscripciones.append((id_, i, "I"))
+                inscripciones.append((id_, estudiantes[i][0], "I"))
                 individual.append((id_, ))
-                esintegrantede.append((estudiantes[i][0], id_, True))
+                esintegrantede.append((estudiantes[j][0], id_, True))
                 if (x[0], id_) not in puestos_competencias:
                     esen.append((x[0], id_, 1))
                     puestos_competencias[(x[0], id_)] = 2
@@ -276,6 +276,6 @@ for e in esen:
     try:
         c.execute('insert into esen values(?,?,?)', e)
         conn.commit()
-    except:
+    except Exception as err:
         pass
 
