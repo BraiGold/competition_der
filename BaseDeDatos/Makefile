@@ -1,12 +1,15 @@
-all: clean | triggers
+all: clean | validar
 
 clean:
 	rm -f DB.db
 
-poblar: DB.db 
+validar: DB.db poblar triggers
+	sqlite3 --column --header DB.db < Validacion.sql
+
+poblar: DB.db triggers
 	python Poblar.py
 
-triggers: DB.db poblar Triggers.sql
+triggers: DB.db Triggers.sql
 	sqlite3 --column --header DB.db < Triggers.sql
 
 DB.db: CrearDB.sql
