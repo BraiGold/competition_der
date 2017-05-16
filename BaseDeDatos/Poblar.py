@@ -181,10 +181,35 @@ def generarInscripciones(estudiantes, participantes, coaches, competencias,cat, 
     esintegrantede.append((11, ultimo_id + 1, True))
     esintegrantede.append((12, ultimo_id + 1, True))
     esintegrantede.append((13, ultimo_id + 1, True))
-    esintegrantede.append((16, ultimo_id + 1, False))
-    esintegrantede.append((17, ultimo_id + 1, False))
-    esintegrantede.append((21, ultimo_id + 1, False))
+    esintegrantede.append((22, ultimo_id + 1, False))
+    esintegrantede.append((29, ultimo_id + 1, False))
+    esintegrantede.append((30, ultimo_id + 1, False))
     esen.append((26, ultimo_id + 1, 1))
+
+
+    inscripciones.append((ultimo_id + 2, 2, "G"))
+    grupal.append((ultimo_id + 2, "nombre_dsa"))
+    esintegrantede.append((28, ultimo_id + 2, True))
+    esintegrantede.append((36, ultimo_id + 2, True))
+    esintegrantede.append((40, ultimo_id + 2, True))
+    esintegrantede.append((55, ultimo_id + 2, True))
+    esintegrantede.append((59, ultimo_id + 2, True))
+    esintegrantede.append((61, ultimo_id + 2, False))
+    esintegrantede.append((63, ultimo_id + 2, False))
+    esintegrantede.append((65, ultimo_id + 2, False))
+    esen.append((26, ultimo_id + 2, 2))
+
+    inscripciones.append((ultimo_id + 3, 0, "G"))
+    grupal.append((ultimo_id + 3, "nombre_asd"))
+    esintegrantede.append((10, ultimo_id + 3, True))
+    esintegrantede.append((25, ultimo_id + 3, True))
+    esintegrantede.append((27, ultimo_id + 3, True))
+    esintegrantede.append((37, ultimo_id + 3, True))
+    esintegrantede.append((70, ultimo_id + 3, True))
+    esintegrantede.append((93, ultimo_id + 3, False))
+    esintegrantede.append((94, ultimo_id + 3, False))
+    esintegrantede.append((108, ultimo_id + 3, False))
+    esen.append((26, ultimo_id + 3, 3))
 
     return inscripciones, individual, grupal, esintegrantede, esen
 
