@@ -28,8 +28,8 @@ listaApellidos = ["Silva",
                   "Reynolds",
                   "Qiu1"]
 
-listaNombresExtra = [ chr(i) for i in range(ord("a"), ord("c")) ]
-listaApellidosExtra = [ chr(i) for i in range(ord("a"), ord("c")) ]
+listaNombresExtra =   [ chr(i) for i in range(ord("a"), ord("g")) ]
+listaApellidosExtra = [ chr(i) for i in range(ord("a"), ord("g")) ]
 
 l = len(listaNombres)
 
@@ -66,7 +66,6 @@ def generarCompetencia(cats):
     comps = [ (i, *r) for i, r in enumerate([ (c[0], 1, t)
                                              for t in tipos
                                              for c in cats[t]])]
-    #modalidades = [ map(lambda x: (x[0],), (filter(lambda c: c[-1] == t, comps))) for t in tipos]
     modalidades = [ [ (c[0],) for c in comps if c[-1] == t ] for t in tipos ]
     return comps, modalidades
 
