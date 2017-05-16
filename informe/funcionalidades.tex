@@ -14,7 +14,7 @@ FROM ( (
   INNER JOIN Competencia c
   ON c.idCompetencia = ee.idCompetencia
 
-ORDER BY eid.numCertificado;
+ORDER BY c.idCompetencia;
 \end{lstlisting}
 
 \emph{El país que obtuvo mayor cantidad de medallas de oro, plata y bronce.}
@@ -152,7 +152,7 @@ ORDER BY puntajeTotal ASC;
 
 \emph{Dado un competidor, la lista de categorías donde haya participado y el resultado obtenido.}
 \begin{lstlisting}[language=SQL]
-SELECT comp.idCategoria , ee.puesto
+SELECT DISTINCT comp.idCategoria , ee.puesto
 FROM (
     (esIntegranteDe eid INNER JOIN inscripcion i
      ON eid.idInscripcion = i.idInscripcion )
