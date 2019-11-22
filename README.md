@@ -1,2 +1,2 @@
-# bbdd-tp1
-bbdd-tp1 1c 2017
+# Trabajo Practico Base De Datos
+Se implementa la Base de datos diseñada con sus consultas 
